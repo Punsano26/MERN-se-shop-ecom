@@ -1,0 +1,202 @@
+[
+  {
+    "_id": "1",
+    "name": "T-Shirt",
+    "description": "Made from 100% cotton",
+    "price": 3343,
+    "image": "https://picsum.photos/200/300?random=1",
+    "category": "Clothing"
+  },
+  {
+    "_id": "2",
+    "name": "Watch",
+    "description": "Adds a touch of style",
+    "price": 4699,
+    "image": "https://picsum.photos/200/300?random=2",
+    "category": "Accessories"
+  },
+  {
+    "_id": "3",
+    "name": "Headphones",
+    "description": "Latest technology",
+    "price": 4544,
+    "image": "https://picsum.photos/200/300?random=3",
+    "category": "Gadgets"
+  },
+  {
+    "_id": "4",
+    "name": "Keyboard",
+    "description": "Innovative design",
+    "price": 4498,
+    "image": "https://picsum.photos/200/300?random=4",
+    "category": "Gadgets"
+  },
+  {
+    "_id": "5",
+    "name": "Hoodie",
+    "description": "Available in various colors",
+    "price": 530,
+    "image": "https://picsum.photos/200/300?random=5",
+    "category": "Clothing"
+  },
+  {
+    "_id": "6",
+    "name": "Bracelet",
+    "description": "High-quality materials",
+    "price": 2022,
+    "image": "https://picsum.photos/200/300?random=6",
+    "category": "Accessories"
+  },
+  {
+    "_id": "7",
+    "name": "Sunglasses",
+    "description": "Elegant and sophisticated",
+    "price": 231,
+    "image": "https://picsum.photos/200/300?random=7",
+    "category": "Accessories"
+  },
+  {
+    "_id": "8",
+    "name": "Necklace",
+    "description": "Adds a touch of style",
+    "price": 3980,
+    "image": "https://picsum.photos/200/300?random=8",
+    "category": "Accessories"
+  },
+  {
+    "_id": "9",
+    "name": "Keyboard",
+    "description": "Latest technology",
+    "price": 2637,
+    "image": "https://picsum.photos/200/300?random=9",
+    "category": "Gadgets"
+  },
+  {
+    "_id": "10",
+    "name": "Bracelet",
+    "description": "Adds a touch of style",
+    "price": 1492,
+    "image": "https://picsum.photos/200/300?random=10",
+    "category": "Accessories"
+  },
+  {
+    "_id": "11",
+    "name": "Sticker",
+    "description": "Show your support",
+    "price": 312,
+    "image": "https://picsum.photos/200/300?random=11",
+    "category": "Swag"
+  },
+  {
+    "_id": "12",
+    "name": "Mouse",
+    "description": "High-performance",
+    "price": 4580,
+    "image": "https://picsum.photos/200/300?random=12",
+    "category": "Gadgets"
+  },
+  {
+    "_id": "13",
+    "name": "Hoodie",
+    "description": "Comfortable and stylish",
+    "price": 603,
+    "image": "https://picsum.photos/200/300?random=13",
+    "category": "Clothing"
+  },
+  {
+    "_id": "14",
+    "name": "Bag",
+    "description": "Show your support",
+    "price": 4999,
+    "image": "https://picsum.photos/200/300?random=14",
+    "category": "Swag"
+  },
+  {
+    "_id": "15",
+    "name": "Mouse",
+    "description": "Innovative design",
+    "price": 3105,
+    "image": "https://picsum.photos/200/300?random=15",
+    "category": "Gadgets"
+  },
+  {
+    "_id": "16",
+    "name": "Sunglasses",
+    "description": "Elegant and sophisticated",
+    "price": 2563,
+    "image": "https://picsum.photos/200/300?random=16",
+    "category": "Accessories"
+  },
+  {
+    "_id": "17",
+    "name": "Jeans",
+    "description": "Comfortable and stylish",
+    "price": 4504,
+    "image": "https://picsum.photos/200/300?random=17",
+    "category": "Clothing"
+  },
+  {
+    "_id": "18",
+    "name": "Sunglasses",
+    "description": "Elegant and sophisticated",
+    "price": 2735,
+    "image": "https://picsum.photos/200/300?random=18",
+    "category": "Accessories"
+  },
+  {
+    "_id": "19",
+    "name": "Sunglasses",
+    "description": "High-quality materials",
+    "price": 3342,
+    "image": "https://picsum.photos/200/300?random=19",
+    "category": "Accessories"
+  },
+  {
+    "_id": "20",
+    "name": "Mug",
+    "description": "Unique design",
+    "price": 1879,
+    "image": "https://picsum.photos/200/300?random=20",
+    "category": "Swag"
+  },
+  {
+    "_id": "21",
+    "name": "Socks",
+    "description": "Made from 100% cotton",
+    "price": 4392,
+    "image": "https://picsum.photos/200/300?random=21",
+    "category": "Clothing"
+  },
+  {
+    "_id": "22",
+    "name": "Mouse",
+    "description": "User-friendly",
+    "price": 1014,
+    "image": "https://picsum.photos/200/300?random=22",
+    "category": "Gadgets"
+  },
+  {
+    "_id": "23",
+    "name": "Sticker",
+    "description": "Collectible item",
+    "price": 1155,
+    "image": "https://picsum.photos/200/300?random=23",
+    "category": "Swag"
+  },
+  {
+    "_id": "24",
+    "name": "Notebook",
+    "description": "Show your support",
+    "price": 3892,
+    "image": "https://picsum.photos/200/300?random=24",
+    "category": "Swag"
+  },
+  {
+    "_id": "25",
+    "name": "Webcam",
+    "description": "User-friendly",
+    "price": 1574,
+    "image": "https://picsum.photos/200/300?random=25",
+    "category": "Gadgets"
+  }
+]
