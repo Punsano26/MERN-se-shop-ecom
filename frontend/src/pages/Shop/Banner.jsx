@@ -13,7 +13,7 @@ const Banner = () => {
             We offer a curated selection of high-quality products ranging from clothing and accessories to home decor and office essentials. Each item is carefully chosen to meet our standards of quality,
           </p>
           <a
-            className="btn bg-red px-8 py-3 font-semibold text-while rounded-full"
+            className="btn bg-red px-8 py-3 font-semibold text-white rounded-full"
             href="/shop"
           >
             Order Now

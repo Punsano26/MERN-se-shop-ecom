@@ -43,7 +43,7 @@ const Product = () => {
     responsive: [
       {
         breakpoint: 1024,
-        setting: {
+        settings: {
           dots: true,
           Infinity: true,
           slidesToShow: 3,
@@ -52,23 +52,22 @@ const Product = () => {
       },
       {
         breakpoint: 970,
-        setting: {
-          initialSlide: 2,
-          slidesToShow: 3,
-          slidesToScroll: 3,
-        },
-      },
-      {
-        breakpoint: 540,
-        setting: {
+        settings: {
           initialSlide: 2,
           slidesToShow: 2,
           slidesToScroll: 2,
         },
       },
       {
+        breakpoint: 576,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
         breakpoint: 480,
-        setting: {
+        settings: {
           initialSlide: 2,
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -100,7 +99,7 @@ const Product = () => {
        <Slider
          ref={slider}
          {...settings}
-         className="overflow-hidden mt-10 space-x-2"
+         className="overflow-hidden mt-10 space-x-5"
        >
          {products.length > 0 &&
            products.map((item, index) => {

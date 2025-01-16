@@ -107,16 +107,17 @@ const ProductList = () => {
             })}
         </div>
 
-      </div>        {/* Pagination */}
-        <div className="flex justify-center my-8 flex-wrap gap-2">
+      </div>     
+         {/* Pagination */}
+         <div className="section-container flex flex-row items-center justify-center my-8 flex-wrap gap-2">
           {Array.from({
             length: Math.ceil(filteredItems.length / itemsPerPage),
           }).map((_, index) => (
             <button
               key={index}
-              className={`mx-1 px-3 py-1 rounded-full ${
-                currentPage === index + 1 ? "bg-red text-white" : "bg-grey"
-              } `}
+              className={`${
+                currentPage === index + 1 ? "bg-red text-white" : ""
+              } px-4 py-2 rounded-full`}
               onClick={() => paginate(index + 1)}
             >
               {index + 1}
