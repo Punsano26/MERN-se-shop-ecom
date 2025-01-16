@@ -10,19 +10,19 @@ const Navbar = () => {
             <summary>Category</summary>
             <ul>
               <li>
-                <a href="">All</a>
+                <a href="/shop">All</a>
               </li>
               <li>
-                <a href="">Cloyhing</a>
+                <a href="/shop?clothing">Clothing</a>
               </li>
               <li>
-                <a href="">Accessories</a>
+                <a href="/shop?accessories">Accessories</a>
               </li>
               <li>
-                <a href="">Gadgets</a>
+                <a href="/shop?gadgets">Gadgets</a>
               </li>
               <li>
-                <a href="">Swag</a>
+                <a href="/shop?swag">Swag</a>
               </li>
             </ul>
           </details>
@@ -93,7 +93,7 @@ const Navbar = () => {
               {navItems}
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">
+          <a className="btn btn-ghost text-xl" href="/">
             <img
               src="/unnamed.png"
               alt="Logo"
