@@ -1,12 +1,12 @@
-import api from './api';
-const API_URL = "";
+import api from "./api";
+const API_URL = "http://localhost:5173";
 
 const getAllProducts = async () => {
-    //http://localhost:5173/product.json
-    return await api.get(`${API_URL}/product.json`);
-}
+  //http://localhost:5173/product.json
+  return await api.get(`${API_URL}/product.json`);
+};
 
-const ProductServie = {
-    getAllProducts,
-}
-export default ProductServie;
+const ProductServices = {
+  getAllProducts,
+};
+export default ProductServices;

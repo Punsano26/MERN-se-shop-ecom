@@ -8,15 +8,15 @@ const Banner = () => {
           <img src="/images/home/banner.png" alt="banner" />
           <div className="flex flex-col md:flex-row items-center justify-around -mt-16 gap-4">
             <ProductItem
-              image="/imgages/home/gamepad.png"
+              image="/images/home/gamepad.png"
               name="Game Pad"
-              rating="3"
+              rate="3"
               price="400"
             />
             <ProductItem
-              image="/imgages/home/headphone.png"
+              image="/images/home/headphone.png"
               name="headphone"
-              rating="4"
+              rate="4"
               price="1000"
             />
           </div>
@@ -24,14 +24,14 @@ const Banner = () => {
         <div className="md:w-1/2 space-y-7 px-4">
           <h2 className="md:text-4xl text-4xl font-bold md:leading-snug leading-snug">
             Discover Uniq <span className="text-red">Software Engineering</span>{" "}
-            Swang for Every Coding En
+            Swag for Everyday coding Enthusiasm!!
           </h2>
           <p className="text-xl text-[#4A4A4A]">
-            our Mission: To merge the fashion with functionality in the world of
-            Sofware Engineering
+            our Mission: To Swag the fashion with functionality in the world of
+            Software Engineering
           </p>
           <a
-            className="btn bg-red px-8 py-3 font-semibold text-while rounded-full"
+            className="btn bg-red text-white px-8 py-3 font-semibold text-while rounded-full"
             href="/shop"
           >
             Order Now

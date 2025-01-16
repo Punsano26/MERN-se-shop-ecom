@@ -4,25 +4,25 @@ const categoryItems = [
     id: 1,
     title: "Clothing",
     number: 86,
-    image: "/images/home/cetagory/img1.jpg",
+    image: "/images/home/category/img1.jpg",
   },
   {
     id: 2,
     title: "Accessories",
-    number: 86,
-    image: "/images/home/cetagory/img2.jpg",
+    number: 24,
+    image: "/images/home/category/img2.jpg",
   },
   {
     id: 3,
     title: "Gadgets",
-    number: 86,
-    image: "/images/home/cetagory/img3.jpg",
+    number: 16,
+    image: "/images/home/category/img3.jpg",
   },
   {
     id: 4,
     title: "swag",
-    number: 86,
-    image: "/images/home/cetagory/img4.jpg",
+    number: 33,
+    image: "/images/home/category/img4.jpg",
   },
 ];
 const Category = () => {
@@ -39,7 +39,7 @@ const Category = () => {
             return (
               <div
                 key={item.id}
-                className="shadow-lg rounded-md bg-white.py-6 px-5 w-72 mx-auto text-center cursor-pointer hover: -translate-y-4 transition-all duration-300"
+                className="shadow-lg rounded-md bg-white py-6 px-5 w-72 mx-auto text-center cursor-pointer hover: -translate-y-4 transition-all duration-300"
               >
                 <div className="w-ful mx-auto flex items-center justify-center">
                   <img

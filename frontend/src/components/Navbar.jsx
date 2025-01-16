@@ -1,67 +1,65 @@
-import React from "react";
-
 const Navbar = () => {
   const navItems = (
     <>
       <li>
         <a href="/">Home</a>
-        <li tabIndex={0}>
-          <details>
-            <summary>Category</summary>
-            <ul>
-              <li>
-                <a href="/shop">All</a>
-              </li>
-              <li>
-                <a href="/shop?clothing">Clothing</a>
-              </li>
-              <li>
-                <a href="/shop?accessories">Accessories</a>
-              </li>
-              <li>
-                <a href="/shop?gadgets">Gadgets</a>
-              </li>
-              <li>
-                <a href="/shop?swag">Swag</a>
-              </li>
-            </ul>
-          </details>
-        </li>
-        <li tabIndex={0}>
-          <details>
-            <summary>Service</summary>
-            <ul>
-              <li>
-                <a href="">Order Online</a>
-              </li>
-              <li>
-                <a href="">Order Tracking</a>
-              </li>
-            </ul>
-          </details>
-        </li>
-        <li tabIndex={0}>
-          <details>
-            <summary>Promotion</summary>
-            <ul>
-              <li>
-                <a href="">All</a>
-              </li>
-              <li>
-                <a href="">Cloyhing</a>
-              </li>
-              <li>
-                <a href="">Accessories</a>
-              </li>
-              <li>
-                <a href="">Gadgets</a>
-              </li>
-              <li>
-                <a href="">Swag</a>
-              </li>
-            </ul>
-          </details>
-        </li>
+      </li>
+      <li tabIndex={0}>
+        <details>
+          <summary>Category</summary>
+          <ul>
+            <li>
+              <a href="/shop">All</a>
+            </li>
+            <li>
+              <a href="/shop?clothing">Clothing</a>
+            </li>
+            <li>
+              <a href="/shop?accessories">Accessories</a>
+            </li>
+            <li>
+              <a href="/shop?gadgets">Gadgets</a>
+            </li>
+            <li>
+              <a href="/shop?swag">Swag</a>
+            </li>
+          </ul>
+        </details>
+      </li>
+      <li tabIndex={0}>
+        <details>
+          <summary>Service</summary>
+          <ul>
+            <li>
+              <a href="">Order online</a>
+            </li>
+            <li>
+              <a href="">Order tracking</a>
+            </li>
+          </ul>
+        </details>
+      </li>
+      <li tabIndex={0}>
+        <details>
+          <summary>Promotions</summary>
+          <ul>
+            <li>
+              <a href="">All</a>
+            </li>
+            <li>
+              <a href="">Clothing</a>
+            </li>
+            <li>
+              <a href="">Accessories</a>
+            </li>
+            <li>
+              <a href="">Gadgets</a>
+            </li>
+            <li>
+              <a href="">Swag</a>
+            </li>
+          </ul>
+        </details>
       </li>
     </>
   );
