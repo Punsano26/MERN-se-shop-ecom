@@ -1,18 +1,26 @@
 import { useState, useEffect } from "react";
 import ProductServices from "../../services/product.service";
 import Card from "../../components/Card";
+import { useSearchParams } from "react-router";
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [sortOption, setSortOption] = useState("default");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchParams, setSearchParams] = useSearchParams();
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
+  const categoryQuery = searchParams.get("category") || "all";
+  const itemsPerPageQuery = searchParams.get("itemsPerPage") || 4;
+  useEffect(() => {
+    setSelectedCategory(categoryQuery);
+    setItemsPerPage(itemsPerPageQuery);
+  }, [categoryQuery, itemsPerPageQuery]);
   useEffect(() => {
     const fetchData = async () => {
       const response = await ProductServices.getAllProducts();
-      console.log(response); // Add this line to check the data
+
       setProducts(response.data);
       setFilteredItems(response.data);
       setCategories([
@@ -30,6 +38,7 @@ const ProductList = () => {
         : products.filter((item) => item.category === category);
     setFilteredItems(filtered);
     handleSortChange(sortOption, filtered);
+    setSearchParams({ ["category"]: category });
     setSelectedCategory(category);
   };
 
@@ -60,7 +69,8 @@ const ProductList = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
-  console.log(currentItems);
+  console.log("filteredItems =", filteredItems);
+  console.log("currentItems =", currentItems);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
@@ -101,29 +111,29 @@ const ProductList = () => {
         </div>
         {/* ProductList */}
         <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4">
+          {console.log("currentItems =", currentItems)}
           {currentItems.length > 0 &&
             currentItems.map((item, index) => {
               return <Card key={index} item={item} />;
             })}
         </div>
-
-      </div>     
-         {/* Pagination */}
-         <div className="section-container flex flex-row items-center justify-center my-8 flex-wrap gap-2">
-          {Array.from({
-            length: Math.ceil(filteredItems.length / itemsPerPage),
-          }).map((_, index) => (
-            <button
-              key={index}
-              className={`${
-                currentPage === index + 1 ? "bg-red text-white" : ""
-              } px-4 py-2 rounded-full`}
-              onClick={() => paginate(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+      </div>
+      {/* Pagination */}
+      <div className="section-container flex flex-row items-center justify-center my-8 flex-wrap gap-2">
+        {Array.from({
+          length: Math.ceil(filteredItems.length / itemsPerPage),
+        }).map((_, index) => (
+          <button
+            key={index}
+            className={`${
+              currentPage === index + 1 ? "bg-red text-white" : ""
+            } px-4 py-2 rounded-full`}
+            onClick={() => paginate(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
