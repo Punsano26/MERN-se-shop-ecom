@@ -3,7 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json");
+const swaggerDocument = require("./doc/swagger");
 
 const app = express();
 const BASE_URL = process.env.BASE_URL;
