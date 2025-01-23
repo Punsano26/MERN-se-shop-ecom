@@ -29,11 +29,12 @@ const SamplePrevArrow = (props) => {
   );
 };
 const Product = () => {
+
   const [products, setProducts] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await ProductServices.getAllProducts();
-      console.log(response); // Add this line to check the data
       const data = response.data;
       const special = data.filter((item) => item.category === "gadget");
       setProducts(special);

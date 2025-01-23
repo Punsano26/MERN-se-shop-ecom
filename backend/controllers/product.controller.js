@@ -129,11 +129,13 @@ exports.deleteProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   const { id } = req.params;
-  if (id) return res.status(404).json({ message: "Product not found" });
+  if (!id) 
+    return res.status(404).json({ message: "Product id is not Provided" });
   try {
     const productDoc = await ProductModel.findById(id);
     if (!productDoc) {
-      return res.status(404).json({ message: "Product not found" });
+       res.status(404).json({ message: "You Cannnot update this product" });
+       return;
     }
 
     const { name, category, description, price } = req.body;
@@ -145,10 +147,9 @@ exports.updateProduct = async (req, res) => {
     productDoc.description = description;
     productDoc.price = price;
 
-    if (req.file) {
-      const path = req.file.firebaseUrl;
-      productDoc.image = path;
-    }
+   if(req.file){
+    productDoc.image = req.file.firebaseUrl;
+   }
 
     await productDoc.save();
     res.status(200).json(productDoc);
