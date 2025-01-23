@@ -3,6 +3,8 @@ import MainLayout from "../layouts/Main";
 import Home from "../pages/Home/Home";
 import Cart from "../pages/Cart/index";
 import Shop from "../pages/Shop/index";
+import SignUp from "../components/SignUp";
+import SignIn from "../components/SignIn";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
+      },
+      {
+        path: "/signup",
+        element: <SignUp />,
+      },
+      {
+        path: "/signin",
+        element: <SignIn />,
       },
     ],
   },
