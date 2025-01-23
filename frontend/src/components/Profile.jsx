@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { AuthContext } from "../context/Authcontext";
+import { AuthContext } from "../contexts/auth.context";
 const Profile = () => {
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
   return (
     <>
       <div className="dropdown dropdown-end">
@@ -44,10 +44,16 @@ const Profile = () => {
           className="btn btn-ghost btn-circle avatar"
         >
           <div className="w-10 rounded-full">
-            <img
-              alt="Tailwind CSS Navbar component"
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-            />
+            {user?.photoURL ? (
+              <div className="w-10 rounded-full">
+                <img src={user.photoURL} alt="User Profile photo" />
+              </div>
+            ) : (
+              <img
+                alt="Tailwind CSS Navbar component"
+                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+              />
+            )}
           </div>
         </div>
         <ul

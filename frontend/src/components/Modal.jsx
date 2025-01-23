@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import GoogleWordmark from "./icons/GoogleIcon";
-import { DiGithubFull } from "react-icons/di";
-import { CiFacebook } from "react-icons/ci";
-import { AuthContext } from "../context/Authcontext";
+import { AuthContext } from "../contexts/auth.context";
 import Swal from "sweetalert2";
 import { useNavigate, useLocation } from "react-router";
+import SocialLogin from "./SocialLogin";
+
 const Modal = ({ name }) => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -14,19 +13,37 @@ const Modal = ({ name }) => {
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit = (data) => {
+    login(data.email, data.password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        document.getElementById(name).close();
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
-    <dialog id="login_modal" className="modal">
+    <dialog id={name} className="modal">
       <div className="modal-box p-5 rounded-lg shadow-lg bg-white relative">
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* ถ้ามีปุ่มในฟอร์ม มันจะปิด modal */}
           <button
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             type="button"
-            onClick={() => document.getElementById("login_modal").close()}
+            onClick={() => document.getElementById(name).close()}
           >
             ✕
           </button>
@@ -45,10 +62,7 @@ const Modal = ({ name }) => {
               type="text"
               className="grow p-2 rounded"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              {...register("email")}
+              {...register("email", { required: true })}
             />
           </label>
           <label className="input input-bordered flex items-center gap-2 mb-3">
@@ -68,8 +82,6 @@ const Modal = ({ name }) => {
               type="password"
               className="grow p-2 rounded"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               {...register("password", { required: true })}
             />
           </label>
@@ -78,18 +90,15 @@ const Modal = ({ name }) => {
           </button>
         </form>
         <p className="py-4 text-sm text-gray-600">
-          Press ESC key or click on ✕ button to close
+          Go to{" "}
+          <a className="text-red" href="/signup">
+            SignUp
+          </a>{" "}
+          now!
         </p>
-        <button className="btn btn-ghost btn-circle hover:bg-red">
-          <GoogleWordmark />
-        </button>
-        <button className="btn btn-ghost btn-circle hover:bg-red">
-          <DiGithubFull />
-        </button>
-        <button className="btn btn-ghost btn-circle hover:bg-red">
-          <CiFacebook />
-        </button>
-        <div className=""></div>
+        <div className="container">
+          <SocialLogin name={name} />
+        </div>
       </div>
     </dialog>
   );

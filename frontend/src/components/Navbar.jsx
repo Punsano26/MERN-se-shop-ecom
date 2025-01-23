@@ -1,5 +1,5 @@
 import Profile from "./Profile";
-import { AuthContext } from "../context/Authcontext";
+import { AuthContext } from "../contexts/auth.context";
 import { useContext } from "react";
 import UserIcon from "./icons/UserIcon";
 import Modal from "./Modal";
@@ -117,11 +117,11 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <button className="btn btn-link">
-                <UserIcon
-                  className="w-6 h-6"
-                  onClick={() => document.getElementById("login").showModal()}
-                />
+              <button
+                className="btn btn-link"
+                onClick={() => document.getElementById("login").showModal()}
+              >
+                <UserIcon className="w-6 h-6" />
                 Login
               </button>
             </>

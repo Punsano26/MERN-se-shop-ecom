@@ -3,7 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./doc/swagger");
+const swaggerDocument = require("./doc/swagger-output.json");
 
 const app = express();
 const BASE_URL = process.env.BASE_URL;
@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 //use Routers
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/v1/auth", userRouter);
 app.use("/api/v1/product", productRouter);
 
