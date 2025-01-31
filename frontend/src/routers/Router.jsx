@@ -5,6 +5,8 @@ import Cart from "../pages/Cart/index";
 import Shop from "../pages/Shop/index";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
+import UserProfile from "../components/UserProfile";
+import SettingProfile from "../components/SettingProfile";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -29,6 +31,14 @@ const router = createBrowserRouter([
       {
         path: "/signin",
         element: <SignIn />,
+      },
+      {
+        path: "/profile",
+        element: <UserProfile />,
+      },
+      {
+        path: "/settings",
+        element: <SettingProfile />,
       },
     ],
   },

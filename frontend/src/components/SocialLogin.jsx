@@ -7,8 +7,9 @@ import Swal from "sweetalert2";
 import { useNavigate, useLocation } from "react-router";
 
 const SocialLogin = ({ name }) => {
-  const { signUpWithGoogle, signUpWithGithub, signUpWithFacebook } =
-    useContext(AuthContext);
+  const { signUpWithGoogle, signUpWithGithub, signUpWithFacebook } = useContext(
+    AuthContext
+  );
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
@@ -72,24 +73,26 @@ const SocialLogin = ({ name }) => {
 
   return (
     <>
-      <button
-        className="btn btn-ghost btn-circle hover:bg-red"
-        onClick={googleSignUp}
-      >
-        <GoogleWordmark className="w-6 h-6" />
-      </button>
-      <button
-        className="btn btn-ghost btn-circle hover:bg-red"
-        onClick={githubSignUp}
-      >
-        <DiGithubFull className="w-6 h-6" />
-      </button>
-      <button
-        className="btn btn-ghost btn-circle hover:bg-red"
-        onClick={facebookSignUp}
-      >
-        <CiFacebook className="w-6 h-6" />
-      </button>
+      <div>
+        <button
+          className="btn btn-ghost btn-circle hover:bg-red"
+          onClick={googleSignUp}
+        >
+          <GoogleWordmark className="w-8 h-8" />
+        </button>
+        <button
+          className="btn btn-ghost btn-circle hover:bg-red"
+          onClick={githubSignUp}
+        >
+          <DiGithubFull className="w-8 h-8" />
+        </button>
+        <button
+          className="btn btn-ghost btn-circle hover:bg-red"
+          onClick={facebookSignUp}
+        >
+          <CiFacebook className="w-8 h-8" />
+        </button>
+      </div>
     </>
   );
 };
