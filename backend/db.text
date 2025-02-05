@@ -1,0 +1,2 @@
+DB_URL = mongodb://localhost:27017/Ecomerce
+DB_URL=mongodb+srv://Punsan:password007xx@cluster0.zoyfu.mongodb.net/Ecomerce?retryWrites=true&w=majority

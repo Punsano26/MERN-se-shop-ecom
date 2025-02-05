@@ -11,6 +11,8 @@ const PORT = process.env.PORT;
 const DB_URL = process.env.DB_URL;
 const userRouter = require("./routers/user.router");
 const productRouter = require("./routers/product.router");
+const cartRouter = require("./routers/cart.router");
+
 //connect to database
 try {
   mongoose.connect(DB_URL);
@@ -30,6 +32,7 @@ app.get("/", (req, res) => {
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/v1/auth", userRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/cart", cartRouter);
 
 app.listen(PORT, () => {
   console.log("Server is running on http://localhost:" + PORT);
