@@ -104,29 +104,27 @@ exports.deleteCartItem = async (req, res) => {
     if (!cartItem) {
       return res.status(404).json({ message: "Cart item not found" });
     }
-    res.status(200).json({ message: "Delete cart item successfully!" });
+    res.json({ message: "Cart item deleted successfully" });
   } catch (error) {
-    res.status(500).send({
-      message:
-        error.message ||
-        "Something error occurred while Deleting cart items by ID",
-    });
+    res.status(500).json({
+      message: "Something error occurred while deleting cart item by email!",
+    })
   }
 };
 
 exports.clearAllItem = async (req, res) => {
   const { email } = req.params;
+  if (!email) {
+    return res.status(400).json({ message: "Email is missing" });
+  }
   try {
     const cart = await CartModel.deleteMany({ email });
-    if (cart.deletedCount > 0) {
-      return res.json({ message: "Cart cleared successfully" });
-    }
-    if (!cart) {
-      return res.status(404).json({ message: "Cart item not found" });
+    if (cart.deletedCount === 0) {
+      return res.status(404).json({ message: "Not have any item to clear" });
     }
     res.status(200).json({ message: "Cart cleared successfully" });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       message:
         error.message ||
         "Something error occurred while clearing shopping items",
