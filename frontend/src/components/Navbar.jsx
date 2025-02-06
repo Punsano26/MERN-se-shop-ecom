@@ -6,6 +6,7 @@ import Modal from "./Modal";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
+
   const navItems = (
     <>
       <li>
