@@ -29,7 +29,7 @@ const Profile = () => {
               />
             </svg>
             <span className="badge badge-sm indicator-item">
-              {cart.lenght || 0}
+              {cart.length || 0}
             </span>
           </div>
         </a>

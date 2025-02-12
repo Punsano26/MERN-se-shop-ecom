@@ -1,42 +1,46 @@
-import React from "react";
+import React, { useContext } from "react";
 import useCart from "../../hooks/useCart";
 import CartService from "../../services/cart.service";
 import Swal from "sweetalert2";
 import { TbHttpDelete } from "react-icons/tb";
+import { AuthContext } from "../../contexts/auth.context";
+
 const Index = () => {
   const [cart, refetch] = useCart();
-
+  const { user } = useContext(AuthContext);
   const handleClearCart = async () => {
     Swal.fire({
+      icon: "question",
       title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, clear all it!",
+      showConfirmButton: true,
+      confirmButtonColor: "#ef233c",
+      cancelButtonColor: "#8d99ae",
+      confirmButtonText: "Yes, remove it!",
     }).then(async (result) => {
+      console.log(user?.email);
+
       if (result.isConfirmed) {
         try {
-          const response = await CartService.clearAllItems(id);
+          const response = await CartService.clearAllItems(user?.email);
           if (response.status === 200) {
-            refetch();
             Swal.fire({
-              icon: "success",
               title: "Success",
-              text: "clear all item successfully!",
+              text: response.data.message,
+              icon: "success",
+              timer: 1500,
               showConfirmButton: false,
-              timer: 2000,
             });
+            refetch();
           }
         } catch (error) {
-          console.error("Error deleting item:", error);
           Swal.fire({
+            title: "Oops...",
+            text: error.message,
             icon: "error",
-            title: "Error",
-            text: "An error occurred while Clearing all the item.",
+            timer: 1500,
             showConfirmButton: false,
-            timer: 2000,
           });
         }
       }
@@ -55,7 +59,7 @@ const Index = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await CartService.deleteCartItem(id);
+          const response = await CartService.deleteCartItem(cartItem._id);
           if (response.status === 200) {
             refetch();
             Swal.fire({
@@ -80,9 +84,52 @@ const Index = () => {
     });
   };
 
-  const handleIncrease = async (id) => {};
+  const handleIncrease = async (cartItem) => {
+    try {
+      const updatedQuantity = cartItem.quantity + 1;
+      //เรียกใช้ updateCartItem จาก CartService โดยส่ง _id และ quantity ที่เพิ่มขึ้นไป และใช้ refetch เพื่อดึงข้อมูลใหม่
+      const response = await CartService.updateCartItem(cartItem._id, {
+        //ส่ง quantity ที่เพิ่มขึ้นไป
+        quantity: updatedQuantity,
+      });
+      if (response.status === 200) {
+        refetch();
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
 
-  const handleDecrease = async (id) => {};
+  const handleDecrease = async (cartItem) => {
+    //ตั้งเงื่อนไขว่าถ้า quantity มากกว่า 1 ให้ทำการลด quantity ลง 1
+    if (cartItem.quantity > 1) {
+      try {
+        const updatedQuantity = cartItem.quantity - 1;
+        const response = await CartService.updateCartItem(cartItem._id, {
+          quantity: updatedQuantity,
+        });
+        if (response.status === 200) {
+          refetch();
+        }
+      } catch (error) {
+        console.log(error);
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    }
+  };
 
   return (
     <div>
@@ -94,81 +141,103 @@ const Index = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="overflow-x-auto ">
-        <table className="table container">
-          {/* head */}
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Product</th>
-              <th>Item Name</th>
-              <th>Quantity</th>
-              <th>Price per unit</th>
-              <th>Price</th>
-              <th>
-                <button
-                  onClick={handleClearCart}
-                  className="btn glass btn-error text-rose-900"
-                >
-                  Glass button
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {cart.length > 0 &&
-              cart.map((cartItem, index) => (
-                <tr key={index}>
+        <div className="overflow-x-auto items-center justify-center w-full container">
+          {cart.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-10">
+              <img
+                className="w-30 h-60 mb-4"
+                src="/notitems.gif"
+                alt="loading.."
+              />{" "}
+              <p className="text-center">No Items In Cart</p>
+            </div>
+          ) : (
+            <table className="table container">
+              {/* head */}
+              <thead>
+                <tr className="text-center">
+                  <th>#</th>
+                  <th>Product</th>
+                  <th>Item Name</th>
+                  <th>Quantity</th>
+                  <th>Price per unit</th>
+                  <th>Price</th>
                   <th>
-                    <label>{index + 1}</label>
+                    <button
+                      onClick={handleClearCart}
+                      className="btn glass btn-error text-rose-900"
+                    >
+                      Clear Cart
+                    </button>
                   </th>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle h-12 w-12">
-                          <img
-                            src={cartItem.image}
-                            alt="Avatar Tailwind CSS Component"
-                          />
+                </tr>
+              </thead>
+              <tbody className="text-center">
+                {cart.map((cartItem, index) => (
+                  <tr key={cartItem._id}>
+                    <th>
+                      <label>{index + 1}</label>
+                    </th>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="avatar">
+                          <div className="mask mask-squircle h-12 w-12">
+                            <img
+                              src={cartItem.image}
+                              alt="Avatar Tailwind CSS Component"
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    {cartItem.name}
-                    <br />
-                  </td>
-                  <td className="">{cartItem.quantity}</td>
-                  <th>
-                    <button className="btn btn-ghost btn-xs">details</button>
-                    <td>{}</td>
-                  </th>
-                  <td>{cartItem.price}</td>
-                  <td>
-                    <button
-                      onClick={() => handleDeleteItem(cartItem)}
-                      className="text-red"
-                    >
-                      <TbHttpDelete className="h-9 w-9" />
-                    </button>
-                  </td>
+                    </td>
+                    <td>
+                      {cartItem.name}
+                      <br />
+                    </td>
+                    <td className="">
+                      <button
+                        onClick={() => handleIncrease(cartItem)}
+                        className="bg-blue-500 hover:bg-blue-800 text-white rounded-md p-2 mr-2"
+                      >
+                        +
+                      </button>
+                      {cartItem.quantity}
+                      <button
+                        onClick={() => handleDecrease(cartItem)}
+                        className="bg-blue-500 hover:bg-blue-800 text-white rounded-md p-2 ml-2"
+                      >
+                        -
+                      </button>
+                    </td>
+                    <th>{cartItem.price}</th>
+                    <td>{cartItem.quantity * cartItem.price}</td>
+                    <td>
+                      <button
+                        onClick={() => handleDeleteItem(cartItem)}
+                        className="text-red"
+                      >
+                        <TbHttpDelete className="h-9 w-9" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="text-center">
+                  <th>#</th>
+                  <th>Product</th>
+                  <th>Item Name</th>
+                  <th>Quantity</th>
+                  <th>Price per unit</th>
+                  <th>Price</th>
+                  <th>Action</th>
                 </tr>
-              ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>#</th>
-              <th>Product</th>
-              <th>Item Name</th>
-              <th>Quantity</th>
-              <th>Price per unit</th>
-              <th>Price</th>
-              <th>Action</th>
-            </tr>
-          </tfoot>
-        </table>
+              </tfoot>
+            </table>
+          )}
+        </div>
       </div>
+     
     </div>
   );
 };

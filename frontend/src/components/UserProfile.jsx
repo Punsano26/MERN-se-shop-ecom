@@ -23,9 +23,7 @@ const UserProfile = () => {
     return <div>Loading...</div>;
   }
 
-  if (user.email) {
-    return <div>Email : {user.email}</div>;
-  }
+  
 
   return (
     <div className="h-screen flex flex-wrap items-center justify-center">

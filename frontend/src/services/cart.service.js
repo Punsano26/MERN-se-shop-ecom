@@ -15,7 +15,8 @@ const updateCartItem = async (id, data) => {
 const deleteCartItem = async (id) => {
   return await api.delete(`${API_URL}/${id}`);
 };
-const clearAllItems = async () => {
+//ส่ง email มาด้วย
+const clearAllItems = async (email) => {
   return await api.delete(`${API_URL}/clear/${email}`);
 };
 const CartService = {
