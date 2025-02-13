@@ -7,6 +7,8 @@ import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 import UserProfile from "../components/UserProfile";
 import SettingProfile from "../components/SettingProfile";
+
+import ProtectPage from "../pages/ProtectPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,8 +23,12 @@ const router = createBrowserRouter([
         element: <Shop />,
       },
       {
-        path: "/cart",
-        element: <Cart />,
+        path: "cart",
+        element: (
+          <ProtectPage>
+            <Cart />
+          </ProtectPage>
+        ),
       },
       {
         path: "/signup",
@@ -34,11 +40,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <UserProfile />,
+        element: (
+          <ProtectPage>
+            <UserProfile />
+          </ProtectPage>
+        ),
       },
       {
         path: "/settings",
-        element: <SettingProfile />,
+        element: (
+          <ProtectPage>
+            <SettingProfile />
+          </ProtectPage>
+        ),
       },
     ],
   },

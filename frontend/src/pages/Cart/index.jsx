@@ -8,6 +8,12 @@ import { AuthContext } from "../../contexts/auth.context";
 const Index = () => {
   const [cart, refetch] = useCart();
   const { user } = useContext(AuthContext);
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("th-TH", {
+      style: "currency",
+      currency: "THB",
+    }).format(price);
+  };
   const handleClearCart = async () => {
     Swal.fire({
       icon: "question",
@@ -85,29 +91,38 @@ const Index = () => {
   };
 
   const handleIncrease = async (cartItem) => {
-    try {
-      const updatedQuantity = cartItem.quantity + 1;
-      //เรียกใช้ updateCartItem จาก CartService โดยส่ง _id และ quantity ที่เพิ่มขึ้นไป และใช้ refetch เพื่อดึงข้อมูลใหม่
-      const response = await CartService.updateCartItem(cartItem._id, {
-        //ส่ง quantity ที่เพิ่มขึ้นไป
-        quantity: updatedQuantity,
-      });
-      if (response.status === 200) {
-        refetch();
+    if (cartItem.quantity + 1 < 16) {
+      try {
+        const updatedQuantity = cartItem.quantity + 1;
+        //เรียกใช้ updateCartItem จาก CartService โดยส่ง _id และ quantity ที่เพิ่มขึ้นไป และใช้ refetch เพื่อดึงข้อมูลใหม่
+        const response = await CartService.updateCartItem(cartItem._id, {
+          //ส่ง quantity ที่เพิ่มขึ้นไป
+          quantity: updatedQuantity,
+        });
+        if (response.status === 200) {
+          refetch();
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
-    } catch (error) {
+    } else {
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-        showConfirmButton: false,
+        icon: "warning",
+        title: "You reach maximum quantity!",
+        text: "You can't add more than 15 items!",
+        showConfirmButton: true,
         timer: 1500,
       });
     }
   };
 
   const handleDecrease = async (cartItem) => {
-    //ตั้งเงื่อนไขว่าถ้า quantity มากกว่า 1 ให้ทำการลด quantity ลง 1
     if (cartItem.quantity > 1) {
       try {
         const updatedQuantity = cartItem.quantity - 1;
@@ -128,9 +143,50 @@ const Index = () => {
           timer: 1500,
         });
       }
+    } else {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await CartService.deleteCartItem(cartItem._id);
+            if (response.status === 200) {
+              refetch();
+              Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Deleted item successfully!",
+                showConfirmButton: false,
+                timer: 2000,
+              });
+            }
+          } catch (error) {
+            console.error("Error deleting item:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "An error occurred while deleting the item.",
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          }
+        }
+      });
     }
   };
-
+  let TotalItem = 0;
+  let TotalPrice = 0;
+  if (cart && cart.length > 0) {
+    cart.forEach((item) => {
+      TotalPrice += item.quantity * item.price;
+    });
+  }
   return (
     <div>
       <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
@@ -150,6 +206,7 @@ const Index = () => {
                 alt="loading.."
               />{" "}
               <p className="text-center">No Items In Cart</p>
+              <button>Shoping</button>
             </div>
           ) : (
             <table className="table container">
@@ -209,8 +266,8 @@ const Index = () => {
                         -
                       </button>
                     </td>
-                    <th>{cartItem.price}</th>
-                    <td>{cartItem.quantity * cartItem.price}</td>
+                    <th>{formatPrice(cartItem.price)}</th>
+                    <td>{formatPrice(cartItem.quantity * cartItem.price)}</td>
                     <td>
                       <button
                         onClick={() => handleDeleteItem(cartItem)}
@@ -236,8 +293,26 @@ const Index = () => {
             </table>
           )}
         </div>
+        <div className="flex flex-col md:flex-row justify-between items-start my-12 gap-8">
+          <div className="md:w-1/2 space-y-3">
+            <h3 className="text-lg font-semibold">Customer Details</h3>
+            <p>Name: {user?.displayName}</p>
+            <p>Email: {user?.email}</p>
+            <p>User Id: {user?.uid}</p>
+          </div>
+          <div className="md:w-1/2 space-y-3">
+            <h3 className="text-lg font-semibold">Shopping Details</h3>
+            <p>Total Product Items:{cart.length}</p>
+            <p>Total Quantity:{TotalPrice}</p>
+            <a
+              href="/check-out"
+              className="btn btn-md bg-red text-white px-8 py-1"
+            >
+              Proceed to checkout
+            </a>
+          </div>
+        </div>
       </div>
-     
     </div>
   );
 };
