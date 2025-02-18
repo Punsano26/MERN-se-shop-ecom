@@ -6,7 +6,16 @@ const getAllProducts = async () => {
   return await api.get(`${API_URL}`);
 };
 
+const addProduct = async (product) => {
+  return await api.post(`${API_URL}`, product, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 const ProductServices = {
   getAllProducts,
+  addProduct,
 };
 export default ProductServices;

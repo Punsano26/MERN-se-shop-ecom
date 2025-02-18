@@ -148,7 +148,7 @@ const Index = () => {
       total += item.quantity * item.price;
     });
     return total;
-  }
+  };
 
   return (
     <div>
@@ -158,69 +158,98 @@ const Index = () => {
         </div>
         <div className="overflow-x-auto w-full">
           {cart.length > 0 ? (
-                      <div>
-                        <table className="table">
-                        <thead>
-                          <tr className="text-center">
-                            <th>#</th>
-                            <th>Product</th>
-                            <th>Item Name</th>
-                            <th>Quantity</th>
-                            <th>Price per unit</th>
-                            <th>Price</th>
-                            <th>
-                              <button onClick={handleClearCart} className="btn glass btn-error text-rose-900">
-                                Clear Cart
-                              </button>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="text-center">
-                          {cart.map((cartItem, index) => (
-                            <tr key={cartItem._id}>
-                              <td>{index + 1}</td>
-                              <td><img src={cartItem.image} alt="Product" className="h-12 w-12" /></td>
-                              <td>{cartItem.name}</td>
-                              <td>
-                                <button onClick={() => handleIncrease(cartItem)} className="bg-blue-500 text-white rounded-md p-2 mr-2">+</button>
-                                {cartItem.quantity}
-                                <button onClick={() => handleDecrease(cartItem)} className="bg-blue-500 text-white rounded-md p-2 ml-2">-</button>
-                              </td>
-                              <td>{formatPrice(cartItem.price)}</td>
-                              <td>{formatPrice(cartItem.quantity * cartItem.price)}</td>
-                              <td><button onClick={() => handleDeleteItem(cartItem)} className="text-red"><TbHttpDelete className="h-9 w-9" /></button></td>
-                            </tr>
-                            
-                          ))}
-                        </tbody>
-                      </table>
-                       <div className="flex flex-col md:flex-row justify-between items-start my-12 gap-8">
-                       <div className="md:w-1/2 space-y-3">
-                         <h3 className="text-lg font-semibold">Customer Details</h3>
-                         <p>Name: {user?.displayName}</p>
-                         <p>Email: {user?.email}</p>
-                         <p>User Id: {user?.uid}</p>
-                       </div>
-                       <div className="md:w-1/2 space-y-3">
-                         <h3 className="text-lg font-semibold">Shopping Details</h3>
-                         <p>Total Product Items:{cart.length}</p>
-                         <p>Total Quantity: {totalPrice}</p>
-                         <a
-                           href="/check-out"
-                           className="btn btn-md bg-red text-white px-8 py-1"
-                         >
-                           Proceed to checkout
-                         </a>
-                       </div>
-                     </div>
-                     </div>
-                    ) : (
-                      <div className="flex flex-col items-center py-10">
-                      <img className="w-30 h-60 mb-4" src="/notitems.gif" alt="loading.." />
-                      <p>No Items In Cart</p>
-                      <button>Shopping</button>
-                    </div>
-                    )}
+            <div>
+              <table className="table">
+                <thead>
+                  <tr className="text-center">
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Price per unit</th>
+                    <th>Price</th>
+                    <th>
+                      <button
+                        onClick={handleClearCart}
+                        className="btn glass btn-error text-rose-900"
+                      >
+                        Clear Cart
+                      </button>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="text-center">
+                  {cart.map((cartItem, index) => (
+                    <tr key={cartItem._id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <img
+                          src={cartItem.image}
+                          alt="Product"
+                          className="h-12 w-12"
+                        />
+                      </td>
+                      <td>{cartItem.name}</td>
+                      <td>
+                        <button
+                          onClick={() => handleIncrease(cartItem)}
+                          className="bg-blue-500 text-white rounded-md p-2 mr-2"
+                        >
+                          +
+                        </button>
+                        {cartItem.quantity}
+                        <button
+                          onClick={() => handleDecrease(cartItem)}
+                          className="bg-blue-500 text-white rounded-md p-2 ml-2"
+                        >
+                          -
+                        </button>
+                      </td>
+                      <td>{formatPrice(cartItem.price)}</td>
+                      <td>{formatPrice(cartItem.quantity * cartItem.price)}</td>
+                      <td>
+                        <button
+                          onClick={() => handleDeleteItem(cartItem)}
+                          className="text-red"
+                        >
+                          <TbHttpDelete className="h-9 w-9" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="flex flex-col md:flex-row justify-between items-start my-12 gap-8">
+                <div className="md:w-1/2 space-y-3">
+                  <h3 className="text-lg font-semibold">Customer Details</h3>
+                  <p>Name: {user?.displayName}</p>
+                  <p>Email: {user?.email}</p>
+                  <p>User Id: {user?.uid}</p>
+                </div>
+                <div className="md:w-1/2 space-y-3">
+                  <h3 className="text-lg font-semibold">Shopping Details</h3>
+                  <p>Total Product Items:{cart.length}</p>
+                  <p>Total Quantity: {totalPrice(cart)} </p>
+                  <a
+                    href="/check-out"
+                    className="btn btn-md bg-red text-white px-8 py-1"
+                  >
+                    Proceed to checkout
+                  </a>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center py-10">
+              <img
+                className="w-30 h-60 mb-4"
+                src="/notitems.gif"
+                alt="loading.."
+              />
+              <p>No Items In Cart</p>
+              <button>Shopping</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
