@@ -4,8 +4,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const secret = process.env.SECRET;
 
-exports.createProduct = async (req, res) => {
-  /**
+/**
     #swagger.tags = ['Product']
     #swagger.summary = "Create a new product"
     #swagger.description = 'Endpoint to create a new product'
@@ -31,6 +30,7 @@ exports.createProduct = async (req, res) => {
        description: "Product created successfully"
     }
    */
+exports.createProduct = async (req, res) => {
   //File upload
 
   if (!req.file) {
@@ -129,13 +129,13 @@ exports.deleteProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   const { id } = req.params;
-  if (!id) 
+  if (!id)
     return res.status(404).json({ message: "Product id is not Provided" });
   try {
     const productDoc = await ProductModel.findById(id);
     if (!productDoc) {
-       res.status(404).json({ message: "You Cannnot update this product" });
-       return;
+      res.status(404).json({ message: "You Cannnot update this product" });
+      return;
     }
 
     const { name, category, description, price } = req.body;
@@ -147,9 +147,9 @@ exports.updateProduct = async (req, res) => {
     productDoc.description = description;
     productDoc.price = price;
 
-   if(req.file){
-    productDoc.image = req.file.firebaseUrl;
-   }
+    if (req.file) {
+      productDoc.image = req.file.firebaseUrl;
+    }
 
     await productDoc.save();
     res.status(200).json(productDoc);
