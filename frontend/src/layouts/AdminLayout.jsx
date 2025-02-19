@@ -60,9 +60,9 @@ const AdminLayout = () => {
                 </a>
               </li>
               <li>
-                <a>
+                <a href="/dashboard/manage-items">
                   <GiAfterburn />
-                  Mamage Items
+                  Manage Items
                 </a>
               </li>
               <li>

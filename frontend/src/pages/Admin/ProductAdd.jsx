@@ -16,9 +16,9 @@ const ProductAdd = () => {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "file") {
-      setProduct({ ...ProductAdd, [name]: files[0] });
+      setProduct({ ...product, [name]: files[0] });
     } else {
-      setProduct({ ...ProductAdd, [name]: value });
+      setProduct({ ...product, [name]: value });
     }
   };
 

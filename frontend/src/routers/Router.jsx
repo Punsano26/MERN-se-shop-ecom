@@ -10,6 +10,7 @@ import UserProfile from "../components/UserProfile";
 import SettingProfile from "../components/SettingProfile";
 import AdminPage from "../pages/Admin/index";
 import ProductAdd from "../pages/Admin/ProductAdd";
+import ManageItems from "../pages/ManageItems/Index";
 import ProtectPage from "../pages/ProtectPage";
 const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <AdminPage /> },
       { path: "add-product", element: <ProductAdd /> },
+      {
+        path: "manage-items",
+        element: <ManageItems/>
+      },
     ],
   },
 ]);

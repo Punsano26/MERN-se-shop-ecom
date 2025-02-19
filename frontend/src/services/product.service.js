@@ -14,8 +14,13 @@ const addProduct = async (product) => {
   });
 };
 
+const deleteProduct = async (id) => {
+  return await api.delete(`${API_URL}/${id}`);
+};
+
 const ProductServices = {
   getAllProducts,
   addProduct,
+  deleteProduct,
 };
 export default ProductServices;
