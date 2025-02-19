@@ -1,6 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 export const AuthContext = createContext();
 import app from "../configs/firebase.config";
+import { Cookies } from "react-cookie";
+import UserService from "../services/user.service";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -13,12 +15,17 @@ import {
   FacebookAuthProvider,
   updateProfile,
 } from "firebase/auth";
-import { set } from "react-hook-form";
-
+const cookies = new Cookies();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const auth = getAuth(app);
+
+  const getUser = () => {
+    const userInfo = cookies.get("user") || null;
+    return userInfo;
+  };
+
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -63,16 +70,26 @@ const AuthProvider = ({ children }) => {
     signUpWithGithub,
     signUpWithFacebook,
     updateUserProfile,
+    getUser,
     isLoading,
   };
 
   //check if user is logged in
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(user);
       if (currentUser) {
         setIsLoading(false);
         setUser(currentUser);
+        const { email } = currentUser;
+        const data = UserService.signJwt({ email });
+        if (data.token) {
+          cookies.set("user", response.data);
+        } else {
+          cookies.remove("user");
+        }
+      } else {
+        setIsLoading(false);
       }
       setIsLoading(false);
     });
@@ -85,5 +102,4 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
-
 export default AuthProvider;

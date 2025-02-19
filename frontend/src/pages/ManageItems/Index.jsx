@@ -2,8 +2,11 @@ import React from "react";
 import ProductServices from "../../services/product.service";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { RxPencil2 } from "react-icons/rx";
 const Index = () => {
   const [products, setProducts] = useState([]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
 
@@ -93,64 +96,103 @@ const Index = () => {
     setCurrentProduct({ ...currentProduct, [name]: value });
   };
 
+  //เปลี่ยนค่าไฟล์รูปภาพ
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setCurrentProduct({ ...currentProduct, file });
+  };
+
   return (
-    <div>
-      <div className="overflow-x-auto">
-        <table className="table">
+    <div className="w-screen max-w-full overflow-x-auto">
+      <div className="w-full overflow-x-auto">
+        <table className="table w-full min-w-full border-collapse border border-gray-300">
           {/* head */}
-          <thead>
+          <thead className="bg-gray-200">
             <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>action</th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Image
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Name
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Price
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Description
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Category
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
             {products.map((product) => (
-              <tr key={product._id}>
-                <td>
+              <tr key={product._id} className="hover:bg-gray-100">
+                <td className="border border-gray-300 px-4 py-2 text-center align-middle">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-20 h-20"
+                    className="w-20 h-20 mx-auto"
                   />
                 </td>
-                <td>{product.name}</td>
-                <td>{product.price}</td>
-                <td>{product.category}</td>
-                <td>
-                  <button
-                    onClick={() => handleDelete(product._id)}
-                    className="btn btn-danger"
-                  >
-                    Delete
-                  </button>
+                <td className="border border-gray-300 px-4 py-2 text-center align-middle">
+                  {product.name}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center align-middle">
+                  {product.price}
+                </td>
+                <td className="border px-4 py-2 text-center align-middle">
+                  {product.description}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center align-middle">
+                  {product.category}
+                </td>
+                <td className="border border-gray-300 text-center align-middle">
                   <button
                     onClick={() => handleEdit(product)}
-                    className="btn btn-warning"
+                    className="mr-2 hover:bg-yellow-200 rounded-lg"
                   >
-                    Edit
+                    <RxPencil2 className="w-8 h-8 text- text-yellow-600" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(product._id)}
+                    className="hover:bg-rose-200 rounded-lg"
+                  >
+                    <RiDeleteBinLine className="w-8 h-8 text-rose-400" />
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
           {/* foot */}
-          <tfoot>
+          <tfoot className="bg-gray-200">
             <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>action</th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Image
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Name
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Price
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Price
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Category
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-center">
+                Action
+              </th>
             </tr>
           </tfoot>
         </table>
       </div>
-
       {/* ModalEditFromnow! */}
 
       {isModalOpen && (
@@ -210,6 +252,15 @@ const Index = () => {
                   className="input input-bordered w-full"
                 />
               </div>
+              {/* <div className="mb-4">
+                <input
+                  type="file"
+                  name="file"
+                  onChange={handleFileChange}
+                  className="file-input file-input-bordered file-input-accent w-full"
+                />
+              </div> */}
+
               <div className="modal-action">
                 <button
                   type="button"

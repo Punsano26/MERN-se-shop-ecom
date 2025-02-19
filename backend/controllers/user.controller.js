@@ -6,81 +6,51 @@ const ProductModel = require("../models/Product");
 require("dotenv").config();
 const secret = process.env.SECRET;
 
-//function register
-exports.register = async (req, res) => {
-  console.log(req.body);
+exports.sign = async (req, res) => {
+  //ฟังก์ชันการเช็คว่าเป็นผู้ใช้งานที่มีอีเมล์ซ้ำกันหรือไม่ในฐานข้อมูล
 
-  const { username, password } = req.body;
-  if (!username || !password) {
-    res.status(400).send({
-      message: "Please provider all required fields!",
-    });
-    return;
+  const { email } = req.body;
+  //Check email is existing in DB?
+  if (!email) {
+    return res.status(404).json({ message: "Email is required" });
   }
-  try {
-    const hashedPassword = bcrypt.hashSync(password, salt);
-    const user = await UserModel.create({
-      username: username,
-      password: hashedPassword,
-    });
-    res.send({
-      message: "User register Successfully",
-      user,
-    });
-  } catch (error) {
-    res.status(500).send({
-      message:
-        error.message ||
-        "Something error occurred while registering a new user.",
-    });
+  const user = await UserModel.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ message: "Email is not found" });
   }
+  //Sing JWT token
+  const token = jwt.sign(
+    { email: user.email, role: user.role },
+    process.env.SECRET,
+    {
+      expiresIn: "1h",
+    }
+  );
+  const userInfo = {
+    token: token,
+    email: user.email,
+    role: user.role,
+  };
+  res.status(200).json(userInfo);
 };
 
-exports.Login = async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    res.status(400).send({
-      message: "Please provider all required fields!",
-    });
-    return;
+exports.addUser = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(404).json({ message: "Email is required" });
   }
   try {
-    const userDoc = await UserModel.findOne({ username });
-    if (!userDoc) {
-      res.status(404).send({
-        message: "User not found!",
-      });
-      return;
+    const existedUser = await UserModel.findOne({ email });
+    if (existedUser) {
+      return res.status(200).json({ message: "Email is already existedUser" });
     }
-
-    const isPasswordMatch = bcrypt.compare(password, userDoc.password);
-    if (!isPasswordMatch) {
-      res.status(401).send({
-        message: "Invalid credentials!",
-      });
-      return;
-    }
-
-    //Login success
-    jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
-      if (err) {
-        return res.status(500).send({
-          message: " Internal server error: Cannot login! generate token ",
-        });
-      }
-
-      //token generated
-      res.send({
-        message: "User logged in successfully",
-        id: userDoc._id,
-        username,
-        accessToken: token,
-      });
-    });
+    const user = new UserModel({ email });
+    await user.save();
+    res.status(201).json(user);
   } catch (error) {
+    console.log(error.message);
     res.status(500).send({
-      message:
-        error.message || "Something error occurred while login in a new user.",
+      message: "Something error occurred while adding a new user",
     });
   }
 };

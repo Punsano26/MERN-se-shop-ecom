@@ -6,6 +6,7 @@ import { CiFacebook } from "react-icons/ci";
 import { AuthContext } from "../contexts/auth.context";
 import Swal from "sweetalert2";
 import { useNavigate, useLocation } from "react-router";
+import UserService from "../services/user.service";
 
 const SignUp = () => {
   const { createUser, signUpWithGoogle } = useContext(AuthContext);
@@ -21,9 +22,10 @@ const SignUp = () => {
 
   const onSubmit = (data) => {
     createUser(data.email, data.password)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log(user);
+        await UserService.addUser(user.enamil);
         Swal.fire({
           icon: "success",
           title: "Register Successful",
@@ -44,9 +46,10 @@ const SignUp = () => {
 
   const googleSignUp = () => {
     signUpWithGoogle()
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log(user);
+        await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
           title: "Google Sign-Up Successful",
@@ -93,7 +96,9 @@ const SignUp = () => {
               />
             </label>
             {errors.email && (
-              <span className="text-red-500 text-sm">{errors.email.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.email.message}
+              </span>
             )}
           </div>
 
@@ -120,7 +125,9 @@ const SignUp = () => {
               />
             </label>
             {errors.password && (
-              <span className="text-red-500 text-sm">{errors.password.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.password.message}
+              </span>
             )}
           </div>
 

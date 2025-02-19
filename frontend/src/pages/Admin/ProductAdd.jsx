@@ -110,6 +110,15 @@ const ProductAdd = () => {
           เพิ่มรายการสินค้า
         </button>
       </div>
+      {product.file && (
+        <div className="flex justify-center mt-4">
+          <img
+            src={URL.createObjectURL(product.file)}
+            alt="Product Preview"
+            className="max-w-xs"
+          />
+        </div>
+      )}
     </div>
   );
 };

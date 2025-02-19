@@ -12,6 +12,7 @@ import AdminPage from "../pages/Admin/index";
 import ProductAdd from "../pages/Admin/ProductAdd";
 import ManageItems from "../pages/ManageItems/Index";
 import ProtectPage from "../pages/ProtectPage";
+import AdminRoute from "../ProtectedRoutes/AdminRoute";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -62,13 +63,18 @@ const router = createBrowserRouter([
 
   {
     path: "dashboard",
-    element: <AdminLayout />,
+    element: (
+      <AdminRoute>
+        <AdminLayout />
+      </AdminRoute>
+    ),
+
     children: [
       { path: "", element: <AdminPage /> },
       { path: "add-product", element: <ProductAdd /> },
       {
         path: "manage-items",
-        element: <ManageItems/>
+        element: <ManageItems />,
       },
     ],
   },

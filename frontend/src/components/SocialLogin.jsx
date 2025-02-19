@@ -5,39 +5,45 @@ import { CiFacebook } from "react-icons/ci";
 import { AuthContext } from "../contexts/auth.context";
 import Swal from "sweetalert2";
 import { useNavigate, useLocation } from "react-router";
+import UserService from "../services/user.service";
 
 const SocialLogin = ({ name }) => {
-  const { signUpWithGoogle, signUpWithGithub, signUpWithFacebook } = useContext(
-    AuthContext
-  );
+  const { signUpWithGoogle, signUpWithGithub, signUpWithFacebook } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
   const googleSignUp = () => {
     signUpWithGoogle()
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log(user);
+        await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
-          title: "Register with Google Successful",
+          title: "Google Sign-Up Successful",
           showConfirmButton: false,
           timer: 1500,
         });
-        document.getElementById(name).close();
         navigate(from, { replace: true });
       })
       .catch((error) => {
         console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Google Sign-Up Failed",
+          text: error.message,
+        });
       });
   };
 
   const githubSignUp = () => {
     signUpWithGithub()
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log(user);
+        await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
           title: "Register with GitHub Successful",
@@ -54,9 +60,10 @@ const SocialLogin = ({ name }) => {
 
   const facebookSignUp = () => {
     signUpWithFacebook()
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log(user);
+        await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
           title: "Register with Facebook Successful",
