@@ -77,13 +77,16 @@ const AuthProvider = ({ children }) => {
   //check if user is logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(user);
+      setUser(currentUser);
       if (currentUser) {
         setIsLoading(false);
         setUser(currentUser);
         const { email } = currentUser;
-        const data = UserService.signJwt({ email });
-        if (data.token) {
+        const response = UserService.signJwt({ email });
+
+        if (response.token) {
+          console.log(response.data);
+          
           cookies.set("user", response.data);
         } else {
           cookies.remove("user");

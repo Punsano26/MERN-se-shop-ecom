@@ -10,65 +10,60 @@ const SampleNextArrow = (props) => {
   return (
     <div
       className={className}
-      style={{ ...style, display: "block", background: "green" }}
+      style={{ ...style, display: "block", background: "red" }}
     >
-      Next
+      NEXT
     </div>
   );
 };
-
 const SamplePrevArrow = (props) => {
-  const { className, onClick, style } = props;
+  const { className, style, onClick } = props;
   return (
     <div
       className={className}
       style={{ ...style, display: "block", background: "green" }}
     >
-      Back
+      BACK
     </div>
   );
 };
+
 const Product = () => {
-
   const [products, setProducts] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       const response = await ProductServices.getAllProducts();
       const data = response.data;
+      //filter data
       const special = data.filter((item) => item.category === "gadget");
+
       setProducts(special);
-      setFilteredItems(response.data);
-      setCategories([
-        "all",
-        ...new Set(response.data.map((item) => item.category)),
-      ]);
     };
     fetchData();
   }, []);
   const slider = useRef(null);
-  const settings = {
+  const setting = {
     dots: true,
-    Infinity: true,
+    Infinite: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 3,
     initialSlide: 1,
-    nextArrow: <SampleNextArrow />,
+    nexArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
-        settings: {
+        setting: {
           dots: true,
-          Infinity: true,
+          Infinite: true,
           slidesToShow: 3,
           slidesToScroll: 3,
         },
       },
       {
         breakpoint: 970,
-        settings: {
+        setting: {
           initialSlide: 2,
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -76,21 +71,14 @@ const Product = () => {
       },
       {
         breakpoint: 576,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          initialSlide: 2,
+        setting: {
           slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
     ],
   };
+
   return (
     <div className="section-container my-20 relative">
       <div className="text-left">
@@ -99,13 +87,13 @@ const Product = () => {
       </div>
       <div className="md:absolute right-3 top-8 mb-10 md:mr-24 space-x-2">
         <button
-          className="text-2xl btn btn-ghost"
+          className="btn bg-red p-2 rounded-full h-10 w-10 mt-5 text-white"
           onClick={() => slider?.current?.slickPrev()}
         >
           &lt;
         </button>
         <button
-          className="text-2xl btn btn-ghost"
+          className="btn bg-red p-2 rounded-full h-10 w-10 mt-5 text-white"
           onClick={() => slider?.current?.slickNext()}
         >
           &gt;
@@ -114,7 +102,7 @@ const Product = () => {
       <div className="slider-container">
         <Slider
           ref={slider}
-          {...settings}
+          {...setting}
           className="overflow-hidden mt-10 space-x-5"
         >
           {products.length > 0 &&
