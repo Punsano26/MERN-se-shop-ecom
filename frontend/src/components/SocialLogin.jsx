@@ -26,6 +26,7 @@ const SocialLogin = ({ name }) => {
           showConfirmButton: false,
           timer: 1500,
         });
+        document.getElementById(name).close();
         navigate(from, { replace: true });
       })
       .catch((error) => {

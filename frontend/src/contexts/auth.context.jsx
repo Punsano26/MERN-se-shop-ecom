@@ -79,20 +79,16 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        setIsLoading(false);
         setUser(currentUser);
+        setIsLoading(false);
         const { email } = currentUser;
-        const response = UserService.signJwt({ email });
-
-        if (response.token) {
+        const response = await UserService.signJwt(email);
+        if (response.data) {
           console.log(response.data);
-          
           cookies.set("user", response.data);
-        } else {
-          cookies.remove("user");
         }
       } else {
-        setIsLoading(false);
+        cookies.remove("user");
       }
       setIsLoading(false);
     });
