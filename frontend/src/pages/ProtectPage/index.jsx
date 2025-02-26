@@ -1,13 +1,17 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/auth.context";
 import { Navigate, useLocation } from "react-router";
-const index = ({ children }) => {
+
+const Index = ({ children }) => {
   const { user, isLoading } = useContext(AuthContext);
   const location = useLocation();
-  if (!user && isLoading === false) {
-    return <Navigate to="/signin" state={{ from: location }} replace />;
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
-  return children;
+  if (user) {
+    return children;
+  }
+  return <Navigate to="/" state={{ from: location }} replace />;
 };
 
-export default index;
+export default Index;

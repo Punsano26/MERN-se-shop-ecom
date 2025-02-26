@@ -12,6 +12,7 @@ import AdminPage from "../pages/Admin/index";
 import ProductAdd from "../pages/Admin/ProductAdd";
 import ManageItems from "../pages/ManageItems/Index";
 import ProtectPage from "../pages/ProtectPage";
+import ProtectLogReg from "../pages/ProtectPage/ProtectLogReg";
 import AdminRoute from "../ProtectedRoutes/AdminRoute";
 import Alluser from "../pages/Admin/Alluser";
 const router = createBrowserRouter([
@@ -37,11 +38,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/signup",
-        element: <SignUp />,
+        element:
+        <ProtectLogReg>
+           <SignUp />
+        </ProtectLogReg>
+       
       },
       {
         path: "/signin",
-        element: <SignIn />,
+        element:(
+         <ProtectLogReg>
+             <SignIn />     
+          </ProtectLogReg>     
+          ),
       },
       {
         path: "/profile",

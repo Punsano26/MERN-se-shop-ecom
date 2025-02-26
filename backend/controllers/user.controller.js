@@ -29,13 +29,12 @@ exports.sign = async (req, res) => {
 };
 
 exports.addUser = async (req, res) => {
+    try {
   const { email } = req.body;
-  console.log(email);
-
   if (!email) {
     return res.status(400).json({ message: "Email is required" });
   }
-  try {
+
     const existedUser = await UserModel.findOne({ email });
     if (existedUser) {
       return res.status(200).json({ message: "Email is already existed" });
@@ -116,8 +115,8 @@ exports.makeAdmin = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     user.role = "admin";
-    user.save();
-    res.json(user);
+    await user.save();
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).send({
       message:
@@ -145,15 +144,15 @@ exports.makeUser = async (req, res) => {
     });
   }
 };
-
-exports.getRolebByEmail = async (req, res) => {
+ 
+exports.getRoleByEmail = async (req, res) => {
   const { email } = req.params;
   try {
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json(user.role);
+    res.status(200).json({ role: user.role });
   } catch (error) {
     res.status(500).send({
       message:

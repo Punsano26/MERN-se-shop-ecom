@@ -15,18 +15,31 @@ const Alluser = () => {
     };
     fetchUsers();
   }, []);
+
   const handleChangeRole = (email) => {
     UserService.getRoleByEmail(email).then((res) => {
       const role = res.data.role;
       if (role === "admin") {
-        UserService.makeUser(email).then((res) => {
-          const newUsers = users.map((user) => {
-            if (user.email === email) {
-              user.role = "user";
-            }
-            return user;
-          });
-          setUsers(newUsers);
+        UserService.makeUser(email).then(() => {
+          setUsers(
+            users.map((user) => {
+              if (user.email === email) {
+                user.role = "user";
+              }
+              return user;
+            })
+          );
+        });
+      } else {
+        UserService.makeAdmin(email).then(() => {
+          setUsers(
+            users.map((user) => {
+              if (user.email === email) {
+                user.role = "admin";
+              }
+              return user;
+            })
+          );
         });
       }
     });

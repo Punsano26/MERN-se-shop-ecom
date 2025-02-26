@@ -20,8 +20,8 @@ const makeAdmin = async (email) => {
 const makeUser = async (email) => {
   return await api.patch(`${API_URL}/user/${email}`, email);
 };
-const deleteUser = async (id, data) => {
-  return await api.delete(`${API_URL}/${id}`, data);
+const deleteUser = async (id) => {
+  return await api.delete(`${API_URL}/${id}`);
 };
 const getRoleByEmail = async (email) => {
   return await api.get(`${API_URL}/role/${email}`);

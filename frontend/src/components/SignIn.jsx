@@ -9,7 +9,7 @@ import { useNavigate, useLocation } from "react-router";
 import UserService from "../services/user.service";
 
 const SignIn = () => {
-  const { login } = useContext(AuthContext);
+  const { login, signUpWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
@@ -23,10 +23,10 @@ const SignIn = () => {
     console.log(data);
 
     login(data.email, data.password)
-      .then( async (result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log(user);
-         await UserService.addUser(user.email);
+        await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
           title: "Login Successful",
@@ -42,10 +42,10 @@ const SignIn = () => {
   };
   const googleSignUp = () => {
     signUpWithGoogle()
-      .then(async(result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log(user);
-         await UserService.addUser(user.email);
+        await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
           title: "Register white google Successful",
@@ -57,6 +57,11 @@ const SignIn = () => {
       })
       .catch((error) => {
         console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Google Sign-Up Failed",
+          text: error.message,
+        });
       });
   };
   return (
@@ -109,9 +114,13 @@ const SignIn = () => {
           </p>
         </form>
         <div className="text-center space-x-3 mb-5">
-          <button className="btn btn-ghost btn-circle hover:bg-red hover:text-white">
-            <GoogleWordmark className="w-6 h-6" onClick={googleSignUp} />
-          </button>
+           <button
+                        onClick={googleSignUp}
+                        className="btn btn-ghost btn-circle hover:bg-red-50 transition duration-300"
+                      >
+                        <GoogleWordmark className="w-8 h-8" />
+                      </button>
+      
           <button className="btn btn-ghost btn-circle hover:bg-red hover:text-white">
             <DiGithubFull className="w-6 h-6" />
           </button>

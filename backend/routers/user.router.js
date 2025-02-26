@@ -9,7 +9,7 @@ router.post("/", userController.addUser);
 
 router.get("/", userController.getAllUsers);
 
-router.get("/role/:email", userController.getRolebByEmail);
+router.get("/role/:email", userController.getRoleByEmail);
 
 router.put(
   "/:id",
