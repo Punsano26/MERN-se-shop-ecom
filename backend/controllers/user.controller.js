@@ -5,7 +5,6 @@ require("dotenv").config();
 const secret = process.env.SECRET;
 console.log(secret);
 
-
 exports.sign = async (req, res) => {
   const { email } = req.body;
   if (!email) {
@@ -29,7 +28,6 @@ exports.sign = async (req, res) => {
   res.status(200).json(userInfo);
 };
 
-
 exports.addUser = async (req, res) => {
   const { email } = req.body;
   console.log(email);
@@ -49,6 +47,117 @@ exports.addUser = async (req, res) => {
     res.status(500).send({
       message:
         error.message || "Something error occurred while adding a new user",
+    });
+  }
+};
+
+//เมธอดสำหรับแสดงข้อมูลผู้ใช้ทั้งหมด
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find();
+    if (!users) {
+      return res.status(200).json({ message: "Not have Users!" });
+    }
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message || "Something error occurred while getting a users",
+    });
+  }
+};
+//เมธอดสำหรับเปลี่ยนแปลงข้อมูลผู้ใช้
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { email, role } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required!" });
+  }
+  try {
+    const user = await UserModel.findByIdAndUpdate(
+      id,
+      { email: email, role: role },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message || "Something error occurred while updatting a user",
+    });
+  }
+};
+//เมธอดสำหรับลบข้อมูลผู้ใช้
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await UserModel.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User is deleted successful!" });
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message || "Something error occurred while deletting a user",
+    });
+  }
+};
+
+exports.makeAdmin = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.role = "admin";
+    user.save();
+    res.json(user);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message ||
+        "Something error occurred while Changing to a role to Admin",
+    });
+  }
+};
+
+exports.makeUser = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.role = "user";
+    user.save();
+    res.json(user);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message ||
+        "Something error occurred while Changing to a role to User",
+    });
+  }
+};
+
+exports.getRolebByEmail = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user.role);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message || "Something error occurred while getting user role",
     });
   }
 };

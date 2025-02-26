@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { AuthContext } from "../contexts/auth.context";
 import useCart from "../hooks/useCart";
+import UserService from "../services/user.service";
 const Profile = () => {
   const { logout, user } = useContext(AuthContext);
   const [cart, refetch] = useCart();
+
   return (
     <>
       <div className="dropdown dropdown-end">
@@ -58,6 +60,11 @@ const Profile = () => {
           <li>
             <a href="/profile">Profile</a>
           </li>
+          {user?.role === "admin" && (
+            <li>
+              <a href="/dashboard">Dashboard</a>
+            </li>
+          )}
           <li>
             <a href="/settings">Settings</a>
           </li>

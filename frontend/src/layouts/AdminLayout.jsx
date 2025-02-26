@@ -66,7 +66,7 @@ const AdminLayout = () => {
                 </a>
               </li>
               <li>
-                <a>
+                <a href="/dashboard/all-users">
                   <GiExecutionerHood />
                   All Users
                 </a>
@@ -79,7 +79,7 @@ const AdminLayout = () => {
               </div>
 
               <li>
-                <a>
+                <a href="/">
                   <GiLockedChest />
                   home
                 </a>
