@@ -6,6 +6,7 @@ import { CiFacebook } from "react-icons/ci";
 import { AuthContext } from "../contexts/auth.context";
 import Swal from "sweetalert2";
 import { useNavigate, useLocation } from "react-router";
+import UserService from "../services/user.service";
 
 const SignIn = () => {
   const { login } = useContext(AuthContext);
@@ -22,9 +23,10 @@ const SignIn = () => {
     console.log(data);
 
     login(data.email, data.password)
-      .then((result) => {
+      .then( async (result) => {
         const user = result.user;
         console.log(user);
+         await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
           title: "Login Successful",
@@ -40,9 +42,10 @@ const SignIn = () => {
   };
   const googleSignUp = () => {
     signUpWithGoogle()
-      .then((result) => {
+      .then(async(result) => {
         const user = result.user;
         console.log(user);
+         await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
           title: "Register white google Successful",
