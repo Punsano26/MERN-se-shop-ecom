@@ -1,9 +1,31 @@
 import { useContext } from "react";
 import { AuthContext } from "../contexts/auth.context";
 import useCart from "../hooks/useCart";
+import Swal from "sweetalert2";
 const Profile = () => {
   const { logout, user } = useContext(AuthContext);
   const [cart, refetch] = useCart();
+  const handleLogout = () => {
+    logout()
+    .then(async (result) => {
+      
+      console.log(result);
+      Swal.fire({
+        icon: "success",
+        title: "Logout Successful",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Logout Failed",
+        text: error.message,
+      });
+    });
+  };
   return (
     <>
       <div className="dropdown dropdown-end">
@@ -62,7 +84,7 @@ const Profile = () => {
             <a href="/settings">Settings</a>
           </li>
           <li>
-            <a onClick={() => logout()}>Logout</a>
+            <a onClick={() => handleLogout()}>Logout</a>
           </li>
         </ul>
       </div>

@@ -247,7 +247,7 @@ const Index = () => {
                 alt="loading.."
               />
               <p>No Items In Cart</p>
-              <button>Shopping</button>
+              <button className="btn btn-primary" onClick={()=>(window.location.href = "/shop")}>Shopping</button>
             </div>
           )}
         </div>
