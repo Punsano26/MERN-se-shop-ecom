@@ -15,6 +15,7 @@ import ProtectPage from "../pages/ProtectPage";
 import ProtectLogReg from "../pages/ProtectPage/ProtectLogReg";
 import AdminRoute from "../ProtectedRoutes/AdminRoute";
 import Alluser from "../pages/Admin/Alluser";
+import CheckOutSuccess from "../pages/CheckOutSuccess";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -66,6 +67,12 @@ const router = createBrowserRouter([
           <ProtectPage>
             <SettingProfile />
           </ProtectPage>
+        ),
+      },
+      {
+        path: "/checkout-success",
+        element:(
+          <CheckOutSuccess/>
         ),
       },
     ],

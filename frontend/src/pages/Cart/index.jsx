@@ -4,7 +4,7 @@ import CartService from "../../services/cart.service";
 import Swal from "sweetalert2";
 import { TbHttpDelete } from "react-icons/tb";
 import { AuthContext } from "../../contexts/auth.context";
-
+import PaymentButton from "../../components/PaymentButton";
 const Index = () => {
   const [cart, refetch] = useCart();
   const { user } = useContext(AuthContext);
@@ -230,12 +230,7 @@ const Index = () => {
                   <h3 className="text-lg font-semibold">Shopping Details</h3>
                   <p>Total Product Items:{cart.length}</p>
                   <p>Total Quantity: {totalPrice(cart)} </p>
-                  <a
-                    href="/check-out"
-                    className="btn btn-md bg-red text-white px-8 py-1"
-                  >
-                    Proceed to checkout
-                  </a>
+                  <PaymentButton cartItems={cart} />
                 </div>
               </div>
             </div>
