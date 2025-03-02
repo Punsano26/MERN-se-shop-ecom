@@ -72,7 +72,7 @@ const Alluser = () => {
                   <p>User</p>
                   <input
                     type="checkbox"
-                    class="toggle toggle-error mr-2 ml-2"
+                    className="toggle toggle-error mr-2 ml-2"
                     onClick={() => handleChangeRole(user.email)}
                     checked={user.role === "admin"}
                   />

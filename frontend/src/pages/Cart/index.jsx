@@ -242,7 +242,12 @@ const Index = () => {
                 alt="loading.."
               />
               <p>No Items In Cart</p>
-              <button>Shopping</button>
+              <a
+                className="relative bg-black text-blue-400 font-bold py-2 px-4 rounded-lg shadow-lg before:absolute before:inset-0 before:bg-blue-400 before:opacity-0 before:hover:opacity-100 before:transition-opacity before:duration-300 before:blur-md"
+                href="/shop"
+              >
+                Shopping
+              </a>
             </div>
           )}
         </div>

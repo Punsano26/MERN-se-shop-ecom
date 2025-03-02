@@ -108,33 +108,37 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.makeAdmin = async (req, res) => {
-  const { email } = req.params;
+  const { email } = req.body; // หรือ req.body.email หากส่งผ่าน Body
   try {
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    // Update role and save
     user.role = "admin";
     await user.save();
-    res.status(200).json(user);
+
+    res.status(200).json({ message: "User is now an admin", user });
   } catch (error) {
-    res.status(500).send({
+    console.error("Error in makeAdmin:", error);
+    res.status(500).json({
       message:
         error.message ||
-        "Something error occurred while Changing to a role to Admin",
+        "An error occurred while changing the role to Admin",
     });
   }
 };
 
 exports.makeUser = async (req, res) => {
-  const { email } = req.params;
+  const { email } = req.body;
   try {
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
     user.role = "user";
-    user.save();
+   await user.save();
     res.json(user);
   } catch (error) {
     res.status(500).send({

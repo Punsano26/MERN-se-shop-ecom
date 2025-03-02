@@ -60,6 +60,7 @@ const Profile = () => {
           <li>
             <a href="/profile">Profile</a>
           </li>
+          {console.log("User data:", user)}
           {user?.role === "admin" && (
             <li>
               <a href="/dashboard">Dashboard</a>

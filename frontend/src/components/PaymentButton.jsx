@@ -2,7 +2,7 @@ import React from "react";
 import StripeService from "../services/stripe.service";
 import { AuthContext } from "../contexts/auth.context";
 import { useContext } from "react";
-
+import CartService from "../services/cart.service";
 const PaymentButton = ({ cartItems }) => {
   const { user } = useContext(AuthContext);
   const handleCheckOut = async () => {
@@ -10,12 +10,14 @@ const PaymentButton = ({ cartItems }) => {
       cart: cartItems,
       email: user.email,
     })
-      .then((res) => {
+      .then(async(res) => {
         window.location.href = res.data.url;
+        await CartService.clearAllItems(user.email);
       })
       .catch((err) => {
         console.log(err.message);
       });
+      
   };
   return (
     <>
