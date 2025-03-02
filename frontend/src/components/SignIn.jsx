@@ -65,71 +65,96 @@ const SignIn = () => {
       });
   };
   return (
-    <div>
-      <div className="modal-action mt-0 flex flex-col justify-center items-center">
-        <h3 className="font-bold text-lg">Please Login</h3>
-        <form method="card-body " onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-control">
-            <label className="form-control w-full max-w-xs">
-              <div className="label">
-                <span className="label-text">Email</span>
-              </div>
-              <input
-                type="text"
-                className="input input-bordered"
-                placeholder="Email"
-                {...register("email", { required: true })}
-              />
-            </label>
-          </div>
-          <div className="form-control">
-            {" "}
-            <label className="form-control w-full max-w-xs">
-              <div className="label">
-                <span className="label-text">Password</span>
-              </div>
-              <input
-                type="password"
-                className="input input-bordered"
-                placeholder="Password"
-                {...register("password", { required: true })}
-              />
-            </label>
-            <label className="label">
-              <a className="label-text-alt link link-hover">Forgot password?</a>
-            </label>
-          </div>
-          <div className="form-control mt-6">
-            <input
-              type="submit"
-              value={"Log in"}
-              className="btn bg-red ml-1 text-white"
-            />
-          </div>
-          <p className="text-center my-2">
-            Don&apos;t have an account?
-            <a href="/signup" className="underline text-md ml-1">
-              Sign Up Now
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+  <div className="card w-full max-w-md shadow-xl bg-white">
+    <div className="card-body p-6">
+      {/* Header */}
+      <h3 className="text-center font-bold text-2xl mb-4">Please Login</h3>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Email Field */}
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Email</span>
+          </label>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="input input-bordered w-full"
+            {...register("email", { required: true })}
+          />
+        </div>
+
+        {/* Password Field */}
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Password</span>
+          </label>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            className="input input-bordered w-full"
+            {...register("password", { required: true })}
+          />
+          <label className="label">
+            <a href="/forgot-password" className="label-text-alt link link-hover">
+              Forgot password?
             </a>
-          </p>
-        </form>
-        <div className="text-center space-x-3 mb-5">
-           <button
-                        onClick={googleSignUp}
-                        className="btn btn-ghost btn-circle hover:bg-red-50 transition duration-300"
-                      >
-                        <GoogleWordmark className="w-8 h-8" />
-                      </button>
-      
-          <button className="btn btn-ghost btn-circle hover:bg-red hover:text-white">
-            <DiGithubFull className="w-6 h-6" />
-          </button>
-          <button className="btn btn-ghost btn-circle hover:bg-red hover:text-white">
-            <CiFacebook className="w-6 h-6" />
+          </label>
+        </div>
+
+        {/* Submit Button */}
+        <div className="form-control mt-4">
+          <button
+            type="submit"
+            className="btn btn-block bg-red-500 hover:bg-red-600 text-white"
+          >
+            Log In
           </button>
         </div>
+      </form>
+
+      {/* Signup Link */}
+      <p className="text-center my-4">
+        Don&apos;t have an account?{" "}
+        <a href="/signup" className="underline text-red-500 hover:text-red-600">
+          Sign Up Now
+        </a>
+      </p>
+
+      {/* Divider */}
+      <div className="divider">OR</div>
+
+      {/* Social Login Buttons */}
+      <div className="flex justify-center space-x-4">
+        {/* Google Button */}
+        <button
+          onClick={googleSignUp}
+          className="btn btn-circle btn-outline hover:bg-red-50 hover:text-red-500 transition duration-300"
+        >
+        <GoogleWordmark className="w-8 h-8" />
+        </button>
+
+        {/* GitHub Button */}
+        <button
+       
+          className="btn btn-circle btn-outline hover:bg-gray-800 hover:text-white transition duration-300"
+        >
+          <DiGithubFull className="w-8 h-8" />
+        </button>
+
+        {/* Facebook Button */}
+        <button
+          
+          className="btn btn-circle btn-outline hover:bg-blue-600 hover:text-white transition duration-300"
+        >
+           <CiFacebook className="w-8 h-8" />
+        </button>
       </div>
     </div>
+  </div>
+</div>
   );
 };
 

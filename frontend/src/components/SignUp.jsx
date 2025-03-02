@@ -25,7 +25,7 @@ const SignUp = () => {
       .then(async (result) => {
         const user = result.user;
         console.log(user);
-        await UserService.addUser(user.enamil);
+        await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
           title: "Register Successful",
