@@ -22,6 +22,8 @@ try {
 }
 
 app.use(cors({ origin: BASE_URL, credentials: true }));
+//ถ้าเกิดเป็น webhook จะต้องใช้ express.raw เพราะ stripe จะส่งข้อมูลมาเป็น raw data
+app.use("/api/v1/stripe/webhook", express.raw({ type: "application/json" }));
 //credentials
 app.use(express.json());
 app.get("/", (req, res) => {

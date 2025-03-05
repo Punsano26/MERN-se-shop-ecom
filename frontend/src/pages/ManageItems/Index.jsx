@@ -92,8 +92,12 @@ const Index = () => {
   };
   //เปลี่ยนค่าข้อมูลสินค้า
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCurrentProduct({ ...currentProduct, [name]: value });
+    const { name, value, files } = e.target;
+    if (name === "file") {
+      setCurrentProduct({ ...products, [name]: files[0] });
+    } else {
+      setCurrentProduct({ ...products, [name]: value });
+    }
   };
 
   //เปลี่ยนค่าไฟล์รูปภาพ
@@ -226,6 +230,31 @@ const Index = () => {
                   className="input input-bordered w-full"
                 />
               </div>
+
+              <div className="form-control mb-4">
+                <label className="label">
+                  <span className="label-text">File Photo:</span>
+                </label>
+
+                {/* แสดงภาพที่อัปโหลดใหม่ ถ้ามี */}
+                {currentProduct?.file && (
+                  <div className="flex justify-center mt-4">
+                    <img
+                      src={URL.createObjectURL(currentProduct.file)}
+                      alt="New Product Preview"
+                      className="max-w-xs"
+                    />
+                  </div>
+                )}
+
+                <input
+                  type="file"
+                  name="file"
+                  onChange={handleFileChange}
+                  className="file-input file-input-neutral"
+                />
+              </div>
+
               <div className="form-control mb-4">
                 <label className="label">
                   <span className="label-text">Price:</span>
@@ -252,14 +281,6 @@ const Index = () => {
                   className="input input-bordered w-full"
                 />
               </div>
-              {/* <div className="mb-4">
-                <input
-                  type="file"
-                  name="file"
-                  onChange={handleFileChange}
-                  className="file-input file-input-bordered file-input-accent w-full"
-                />
-              </div> */}
 
               <div className="modal-action">
                 <button

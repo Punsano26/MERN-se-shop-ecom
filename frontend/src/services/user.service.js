@@ -27,6 +27,7 @@ const deleteUser = async (id) => {
 const getRoleByEmail = async (email) => {
   return await api.get(`${API_URL}/role/${email}`);
 };
+
 const UserService = {
   signJwt,
   addUser,
