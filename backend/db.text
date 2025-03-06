@@ -10,3 +10,5 @@ apiKey= AIzaSyATuoNPrYe4ZHX99kWxiCt1M0PnWVJImdE
   storageBucket= component-b8f46.firebasestorage.app
   messagingSenderId= 21962389027
   appId= 1:21962389027:web:7085072a3084615fe9a396
+  SECRET_KEY_STRIPE = "sk_test_51QwweE2fRuTIljUwcT3vIAGOFSMuj1qWaNFs3w4yHk9iOeJGcwnopyJW3qB27OvhpkwUj5o46hp66iKTb6GJhIBs00fNmn6iIG"
+SECRET_WEBHOOK_STRIPE = "whsec_97da2b61167011aa78d5c7f67f48b37036ef9a52047e0a50a6990df310fb4aac"
