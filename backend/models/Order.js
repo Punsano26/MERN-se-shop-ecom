@@ -16,7 +16,7 @@ const OrderSchema = new Schema(
       },
     ],
     subtotal: { type: String, required: true },
-    total: { type: Number, required: true, default: 1 },
+    total: { type: Number, required: true, default: 0 },
     shipping: { type: Object, required: true },
     delivery_status: { type: String, required: true, default: "pending" },
     payment_status: { type: String, required: true, default: "unpaid" },
