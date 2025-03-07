@@ -13,6 +13,7 @@ const userRouter = require("./routers/user.router");
 const productRouter = require("./routers/product.router");
 const cartRouter = require("./routers/cart.router");
 const stripeRouter = require("./routers/stripe.router");
+const OrderRouter = require("./routers/order.router");
 //connect to database
 try {
   mongoose.connect(DB_URL);
@@ -36,6 +37,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/stripe", stripeRouter);
+app.use("/api/v1/order", OrderRouter);
 
 app.listen(PORT, () => {
   console.log("Server is running on http://localhost:" + PORT);
