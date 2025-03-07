@@ -89,7 +89,7 @@ const AdminLayout = () => {
                 </a>
               </li>
               <li>
-                <a>
+                <a href="/dashboard/manage-orders">
                   <GiAbstract005 />
                   Manage Orders
                 </a>

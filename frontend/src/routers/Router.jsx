@@ -16,6 +16,7 @@ import ProtectLogReg from "../pages/ProtectPage/ProtectLogReg";
 import AdminRoute from "../ProtectedRoutes/AdminRoute";
 import Alluser from "../pages/Admin/Alluser";
 import CheckOutSuccess from "../pages/CheckOutSuccess";
+import ManageOrders from "../pages/ManageOrders/index";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <AdminPage /> },
       { path: "add-product", element: <ProductAdd /> },
+      {
+        path: "manage-orders",
+        element: <ManageOrders />,
+      },
       {
         path: "manage-items",
         element: <ManageItems />,
