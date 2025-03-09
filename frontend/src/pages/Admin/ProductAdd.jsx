@@ -60,7 +60,7 @@ const ProductAdd = () => {
     }
   };
   return (
-    <div>
+    <div className="card w-96 bg-base-100 p-6 bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 rounded-2xl shadow-lg">
       <h4 className="text-lg text-center">เพิ่มรายการสินค้า</h4>
       <label className="mt-4 input input-bordered flex items-center gap-2">
         Name
@@ -77,7 +77,7 @@ const ProductAdd = () => {
         value={product.description}
         onChange={handleChange}
         name="description"
-        className="textarea mt-2 gap-2"
+        className="textarea mt-2 gap-2 w-full"
         placeholder="Bio"
       ></textarea>
    
@@ -106,7 +106,7 @@ const ProductAdd = () => {
         type="file"
         name="file"
         onChange={handleChange}
-        className="file-input file-input-bordered file-input-md w-full max-w-xs mt-2"
+        className="file-input file-input-bordered file-input-md w-full mt-2"
       />
       <div className="flex justify-center mt-4">
         <button onClick={handleSubmit} class="btn btn-success">

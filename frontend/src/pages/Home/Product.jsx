@@ -35,7 +35,7 @@ const Product = () => {
       const response = await ProductServices.getAllProducts();
       const data = response.data;
       //filter data
-      const special = data.filter((item) => item.category === "gadget");
+      const special = data.filter((item) => item.category === "Gadgets");
 
       setProducts(special);
     };
