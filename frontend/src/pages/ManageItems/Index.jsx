@@ -9,6 +9,8 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editProduct, setEditProduct] = useState(null); // เก็บข้อมูลสินค้าที่แก้ไข
   const [selectedImage, setSelectedImage] = useState(null); // เก็บไฟล์รูปใหม่
+  const [currentPage, setCurrentPage] = useState(1); // เพิ่ม state สำหรับหน้า
+  const [productsPerPage] = useState(5); // จำนวนสินค้าต่อหน้า
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -68,7 +70,6 @@ const Index = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedImage(file);
-    // แสดงตัวอย่างรูปภาพใหม่
     if (file) {
       setEditProduct((prev) => ({
         ...prev,
@@ -121,6 +122,16 @@ const Index = () => {
     }
   };
 
+  // Pagination logic
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="w-screen max-w-full overflow-x-auto">
       <div className="w-full overflow-x-auto">
@@ -148,7 +159,7 @@ const Index = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {currentProducts.map((product) => (
               <tr key={product._id} className="hover:bg-gray-100">
                 <td className="border border-gray-300 px-4 py-2 text-center align-middle">
                   <img
@@ -210,6 +221,42 @@ const Index = () => {
           </tfoot>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-between items-center mt-4 border-t pt-4">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          className="px-4 py-2 border rounded-lg text-gray-900 hover:bg-gray-100 disabled:opacity-50"
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+
+        <div className="flex gap-2">
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => paginate(index + 1)}
+              className={`h-8 w-8 border rounded-lg text-gray-900 hover:bg-gray-100 ${
+                currentPage === index + 1 ? "bg-blue-500 text-white" : ""
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          className="px-4 py-2 border rounded-lg text-gray-900 hover:bg-gray-100 disabled:opacity-50"
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+
       {/* ModalEditForm */}
       {isModalOpen && (
         <div className="modal modal-open">
@@ -246,7 +293,6 @@ const Index = () => {
                 <label className="label" htmlFor="file">
                   <span className="label-text">File Photo:</span>
                 </label>
-                {/* แสดงรูปภาพเดิม */}
                 {editProduct?.image && !selectedImage && (
                   <div className="flex justify-center mt-4">
                     <img
@@ -256,7 +302,6 @@ const Index = () => {
                     />
                   </div>
                 )}
-                {/* แสดงตัวอย่างรูปภาพใหม่ */}
                 {selectedImage && (
                   <div className="flex justify-center mt-4">
                     <img

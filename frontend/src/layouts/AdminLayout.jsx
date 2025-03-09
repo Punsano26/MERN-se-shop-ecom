@@ -83,7 +83,7 @@ const AdminLayout = () => {
                 <div class="flex-grow border-t border-gray-400"></div>
               </div>
               <li>
-                <a>
+                <a href="/dashboard">
                   <GiAbstract028 />
                   Dashboard
                 </a>
