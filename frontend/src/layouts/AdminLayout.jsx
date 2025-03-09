@@ -27,7 +27,7 @@ const AdminLayout = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         logout();
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire("Logout!", "Your Logout now.", "success");
       }
     })
   }
