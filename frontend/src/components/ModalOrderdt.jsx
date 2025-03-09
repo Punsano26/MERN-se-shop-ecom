@@ -12,42 +12,48 @@ const ModalOrderdt = ({ orderDetail, orderID }) => {
       }).format(price);
     };
     
-  useEffect(() => {
-    const getOrderById = async () => {
+    useEffect(() => {
       try {
-        const response = await OrderService.getOrderById(orderID);
-        if (response.status === 200) {
-          setOrder(response.data);
-        }
+        OrderService.getOrderById(orderID).then((res) => {
+          setOrder(res.data);
+        });
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops... Get all orders failed",
-          text: error?.response?.data?.message || error.message,
-          footer: '<a href="">Why do I have this issue?</a>',
+        console.log(error);
+      }
+    }, [orderID]);
+
+
+    useEffect(() => {
+      if (order && order.products) {
+        order.products.forEach((product, index) => {
+          // ตรวจสอบว่า productId มีค่าและไม่ใช่ 'undefined' หรือ null
+          if (!product.productId || product.productId === "undefined") {
+            console.warn(`Skipping product at index ${index}: Invalid productId`, product);
+            return;
+          }
+    
+          ProductServices.getProductByID(product.productId)
+            .then((res) => {
+              setOrder((prevOrder) => {
+                const updatedProducts = [...prevOrder.products];
+                updatedProducts[index] = {
+                  ...res.data,
+                  quantity: product.quantity,
+                };
+                return { ...prevOrder, products: updatedProducts };
+              });
+            })
+            .catch((error) => {
+              console.error(`Failed to fetch product with ID ${product.productId}:`, error);
+              Swal.fire({
+                icon: "error",
+                title: "Failed to load product",
+                text: `Could not load product with ID ${product.productId}`,
+              });
+            });
         });
       }
-    };
-    getOrderById();
-  }, [orderID]);
-
-
-  useEffect(() => {
-    if (order) {
-      order.products.map((product, index) => {
-        ProductServices.getProductByID(product.productId).then((res) => {
-            setOrder((prevOrder) => {
-            const updatedProducts = [...prevOrder.products];
-            updatedProducts[index] = {
-              ...res.data,
-              quantity: product.quantity,
-            };
-            return { ...prevOrder, products: updatedProducts };
-          });
-        });
-      });
-    }
-  }, [order]);
+    }, [order]);
   return (
     <div>
       {/* You can open the modal using document.getElementById('ID').showModal() method */}
