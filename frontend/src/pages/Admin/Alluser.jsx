@@ -155,7 +155,7 @@ const Alluser = () => {
             onClick={() => paginate(index + 1)}
             key={index}
             className={`mx-1 btn btn-ghost ${
-              currentPage === index + 1 ? "bg-[#d6ccc2] text-white" : ""
+              currentPage === index + 1 ? "bg-[#a97e52] text-white" : ""
             }`}
           >
             {index + 1}
