@@ -3,8 +3,11 @@ import { AuthContext } from "../contexts/auth.context";
 import useCart from "../hooks/useCart";
 import UserService from "../services/user.service";
 const Profile = () => {
-  const { logout, user } = useContext(AuthContext);
+  const { logout, user, getUser } = useContext(AuthContext);
   const [cart, refetch] = useCart();
+  const userInfo = getUser();
+  console.log("user", userInfo);
+  
 
   return (
     <>
@@ -60,8 +63,7 @@ const Profile = () => {
           <li>
             <a href="/profile">Profile</a>
           </li>
-          {console.log("User data:", user)}
-          {user?.role === "admin" && (
+          {userInfo?.role === "admin" && (
             <li>
               <a href="/dashboard">Dashboard</a>
             </li>
