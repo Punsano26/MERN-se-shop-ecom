@@ -72,14 +72,17 @@ const ProductAdd = () => {
           name="name"
         />
       </label>
-      <textarea
+      
+        <textarea
         value={product.description}
         onChange={handleChange}
         name="description"
-        className="textarea"
+        className="textarea mt-2 gap-2"
         placeholder="Bio"
       ></textarea>
-      <label className="input input-bordered flex items-center gap-2">
+   
+      
+      <label className="input input-bordered flex items-center gap-2 mt-2">
         Price
         <input
           value={product.price}
@@ -89,7 +92,7 @@ const ProductAdd = () => {
           className="grow"
         />
       </label>
-      <label className="input input-bordered flex items-center gap-2">
+      <label className="input input-bordered flex items-center gap-2 mt-2">
         category
         <input
           value={product.category}
@@ -103,7 +106,7 @@ const ProductAdd = () => {
         type="file"
         name="file"
         onChange={handleChange}
-        className="file-input file-input-bordered file-input-md w-full max-w-xs"
+        className="file-input file-input-bordered file-input-md w-full max-w-xs mt-2"
       />
       <div className="flex justify-center mt-4">
         <button onClick={handleSubmit} class="btn btn-success">

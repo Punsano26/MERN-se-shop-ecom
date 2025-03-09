@@ -32,7 +32,7 @@ exports.createCheckOutSession = async (req, res) => {
             productId: item.productId,
           },
         },
-        unit_amount: Math.round(item.price * 100),
+        unit_amount: item.price * 100,
       },
       quantity: item.quantity,
     };
@@ -121,8 +121,8 @@ const createOrder = async (customer, data) => {
       email: customer.metadata.email,
       customerId: data.customer,
       products: products,
-      subtotal: data.amount_subtotal,
-      total: data.amount_total,
+      subtotal: data.amount_subtotal / 100,
+      total: data.amount_total / 100,
       shipping: data.customer_details,
       payment_status: data.payment_status,
     });

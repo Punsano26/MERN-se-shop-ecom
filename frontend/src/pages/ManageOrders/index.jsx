@@ -7,13 +7,13 @@ import { MdDelete } from "react-icons/md";
 const Index = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrderID, setSelectedOrderID] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);  // Pagination state
-  const [ordersPerPage] = useState(5);  // Set orders per page
-  
+  const [currentPage, setCurrentPage] = useState(1); // Pagination state
+  const [ordersPerPage] = useState(5); // Set orders per page
+
   useEffect(() => {
     const getAllOrders = async () => {
-      try {            
-        const response = await OrderService.getAllOrders();      
+      try {
+        const response = await OrderService.getAllOrders();
         if (response.status === 200) {
           setOrders(response.data);
         }
@@ -28,6 +28,30 @@ const Index = () => {
     };
     getAllOrders();
   }, []);
+
+  const handleDeleteOrder = async (orderId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await OrderService.deleteOrderById(orderId);
+          setOrders((prevOrders) =>
+            prevOrders.filter((order) => order._id !== orderId)
+          );
+          Swal.fire("Deleted!", "The order has been deleted.", "success");
+        } catch (error) {
+          Swal.fire("Error!", "Failed to delete the order.", "error");
+        }
+      }
+    });
+  };
 
   const handleStatusChange = async (orderId, newStatus) => {
     Swal.fire({
@@ -65,7 +89,7 @@ const Index = () => {
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
-  
+
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -76,10 +100,12 @@ const Index = () => {
     <>
       <div className="p-6 bg-white shadow-lg rounded-xl overflow-hidden">
         <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-900">Recent Transactions</h2>
+          <h2 className="text-2xl font-semibold text-gray-900">
+            Recent Transactions
+          </h2>
           <p className="text-gray-600">Details about the last transactions</p>
         </div>
-        
+
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] border-collapse">
             <thead>
@@ -107,7 +133,9 @@ const Index = () => {
                     <select
                       className="border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
                       value={order.delivery_status}
-                      onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                      onChange={(e) =>
+                        handleStatusChange(order._id, e.target.value)
+                      }
                     >
                       <option value="delivered">Delivered</option>
                       <option value="processing">Processing</option>
@@ -116,13 +144,19 @@ const Index = () => {
                     </select>
                   </td>
                   <td className="p-4 flex gap-2">
-                    <button className="px-4 py-2 bg-gray-900 text-white text-xs font-bold uppercase rounded-lg hover:bg-gray-700"
-                            onClick={() => {
-                              setSelectedOrderID(order._id);
-                              document.getElementById("orderDetail").showModal();
-                            }}
-                    >Detail</button>
-                    <button className="text-red">
+                    <button
+                      className="px-4 py-2 bg-gray-900 text-white text-xs font-bold uppercase rounded-lg hover:bg-gray-700"
+                      onClick={() => {
+                        setSelectedOrderID(order._id);
+                        document.getElementById("orderDetail").showModal();
+                      }}
+                    >
+                      Detail
+                    </button>
+                    <button
+                      className="text-red"
+                      onClick={() => handleDeleteOrder(order._id)}
+                    >
                       <MdDelete className="w-8 h-8" />
                     </button>
                   </td>
@@ -131,18 +165,18 @@ const Index = () => {
             </tbody>
           </table>
         </div>
-        
+
         <ModalOrderdt orderDetail="orderDetail" orderID={selectedOrderID} />
 
         {/* Pagination Controls */}
         <div className="flex justify-between items-center mt-4 border-t pt-4">
           <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             className="px-4 py-2 border rounded-lg text-gray-900 hover:bg-gray-100"
           >
             Previous
           </button>
-          
+
           <div className="flex gap-2">
             {/* Display page buttons dynamically */}
             {Array.from({ length: totalPages }).map((_, index) => (
@@ -159,7 +193,9 @@ const Index = () => {
           </div>
 
           <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
             className="px-4 py-2 border rounded-lg text-gray-900 hover:bg-gray-100"
           >
             Next
