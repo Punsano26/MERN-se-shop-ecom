@@ -44,21 +44,24 @@ const SocialLogin = ({ name }) => {
       .then(async (result) => {
         const user = result.user;
         console.log(user);
+        // to do add user to database
         await UserService.addUser(user.email);
-        Swal.fire({
-          icon: "success",
-          title: "Register with GitHub Successful",
-          showConfirmButton: false,
-          timer: 1500,
-        });
         document.getElementById(name).close();
-        navigate(from, { replace: true });
+        Swal.fire({
+          title: "Github authenticate",
+          text: "authenticate successfully!",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate(from);
+        });
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   };
-
+  
   const facebookSignUp = () => {
     signUpWithFacebook()
       .then(async (result) => {
@@ -90,7 +93,7 @@ const SocialLogin = ({ name }) => {
         </button>
         <button
           className="btn btn-ghost btn-circle hover:bg-red"
-          onClick={githubSignUp}
+          onClick={() => githubSignUp()}
         >
           <DiGithubFull className="w-8 h-8" />
         </button>

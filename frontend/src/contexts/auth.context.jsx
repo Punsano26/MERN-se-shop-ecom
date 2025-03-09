@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-export const AuthContext = createContext();
 import app from "../configs/firebase.config";
 import { Cookies } from "react-cookie";
 import UserService from "../services/user.service";
@@ -15,10 +14,14 @@ import {
   FacebookAuthProvider,
   updateProfile,
 } from "firebase/auth";
+import Swal from "sweetalert2"; // เพิ่มสำหรับแจ้งเตือน error
+
 const cookies = new Cookies();
+export const AuthContext = createContext();
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // เริ่มต้นเป็น true เพื่อรอ sync
   const auth = getAuth(app);
 
   const getUser = () => {
@@ -61,6 +64,29 @@ const AuthProvider = ({ children }) => {
     });
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currenUser) => {
+      setUser(currenUser);
+      if (currenUser) {
+        setUser(currenUser);
+        setIsLoading(false);
+        const { email } = currenUser;
+        const { data } = await UserService.signJwt(email);
+        console.log(data);
+        if (data) {
+          cookies.set("user", data);
+        }
+      } else {
+        cookies.remove("user");
+      }
+      setIsLoading(false);
+    });
+
+    return () => {
+      return unsubscribe;
+    };
+  }, [auth]);
+
   const authInfo = {
     user,
     createUser,
@@ -74,31 +100,7 @@ const AuthProvider = ({ children }) => {
     isLoading,
   };
 
-  //check if user is logged in
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        setUser(currentUser);
-        setIsLoading(false);
-        const { email } = currentUser;
-        const response = await UserService.signJwt(email);
-        if (response.data) {
-          console.log(response.data);
-          cookies.set("user", response.data);
-        }
-      } else {
-        cookies.remove("user");
-      }
-      setIsLoading(false);
-    });
-    return () => {
-      return unsubscribe();
-    };
-  }, [auth]);
-
-  return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;
 };
+
 export default AuthProvider;

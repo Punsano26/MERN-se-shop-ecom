@@ -22,38 +22,55 @@ const ModalOrderdt = ({ orderDetail, orderID }) => {
       }
     }, [orderID]);
 
-
-    useEffect(() => {
-      if (order && order.products) {
-        order.products.forEach((product, index) => {
-          // ตรวจสอบว่า productId มีค่าและไม่ใช่ 'undefined' หรือ null
-          if (!product.productId || product.productId === "undefined") {
-            console.warn(`Skipping product at index ${index}: Invalid productId`, product);
-            return;
-          }
-    
-          ProductServices.getProductByID(product.productId)
-            .then((res) => {
-              setOrder((prevOrder) => {
-                const updatedProducts = [...prevOrder.products];
-                updatedProducts[index] = {
-                  ...res.data,
-                  quantity: product.quantity,
-                };
-                return { ...prevOrder, products: updatedProducts };
-              });
-            })
-            .catch((error) => {
-              console.error(`Failed to fetch product with ID ${product.productId}:`, error);
-              Swal.fire({
-                icon: "error",
-                title: "Failed to load product",
-                text: `Could not load product with ID ${product.productId}`,
-              });
+//รุ่นนี้มีบั๊คอยู่ใน หลังบ้าน
+  // useEffect(() =>
+  //   if (order) {
+  //     order.products.map((product, index) => {
+  //       ProductServices.getProductByID(product.productId).then((res) => {
+  //           setOrder((prevOrder) => {
+  //           const updatedProducts = [...prevOrder.products];
+  //           updatedProducts[index] = {
+  //             ...res.data,
+  //             quantity: product.quantity,
+  //           };
+  //           return { ...prevOrder, products: updatedProducts };
+  //         });
+  //       });
+  //     });
+  //   }
+  // }, [order]);
+//รุ่นนี้ใช้งานได้จริงแต่ไม่เข้าใจเลย 
+  useEffect(() => {
+    if (order && order.products) {
+      order.products.forEach((product, index) => {
+        // ตรวจสอบว่า productId มีค่าและไม่ใช่ 'undefined' หรือ null
+        if (!product.productId || product.productId === "undefined") {
+          console.warn(`Skipping product at index ${index}: Invalid productId`, product);
+          return;
+        }
+  
+        ProductServices.getProductByID(product.productId)
+          .then((res) => {
+            setOrder((prevOrder) => {
+              const updatedProducts = [...prevOrder.products];
+              updatedProducts[index] = {
+                ...res.data,
+                quantity: product.quantity,
+              };
+              return { ...prevOrder, products: updatedProducts };
             });
-        });
-      }
-    }, [order]);
+          })
+          .catch((error) => {
+            console.error(`Failed to fetch product with ID ${product.productId}:`, error);
+            Swal.fire({
+              icon: "error",
+              title: "Failed to load product",
+              text: `Could not load product with ID ${product.productId}`,
+            });
+          });
+      });
+    }
+  }, [order]);
   return (
     <div>
       {/* You can open the modal using document.getElementById('ID').showModal() method */}
