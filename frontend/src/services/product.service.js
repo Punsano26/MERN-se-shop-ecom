@@ -19,6 +19,12 @@ const addProduct = async (product) => {
   });
 };
 
+const updateProduct = async (id, product) => {
+  return await api.put(`${API_URL}/${id}`, product, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
+
 const deleteProduct = async (id) => {
   return await api.delete(`${API_URL}/${id}`);
 };
@@ -28,5 +34,6 @@ const ProductServices = {
   addProduct,
   deleteProduct,
   getProductByID,
+  updateProduct,
 };
 export default ProductServices;

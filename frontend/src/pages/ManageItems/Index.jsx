@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProductServices from "../../services/product.service";
-import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { RxPencil2 } from "react-icons/rx";
+
 const Index = () => {
   const [products, setProducts] = useState([]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(null);
+  const [editProduct, setEditProduct] = useState(null); // เก็บข้อมูลสินค้าที่แก้ไข
+  const [selectedImage, setSelectedImage] = useState(null); // เก็บไฟล์รูปใหม่
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -47,70 +47,84 @@ const Index = () => {
       Swal.fire({
         icon: "error",
         title: "ลบสินค้าไม่สำเร็จ",
-        text: error.response.data.message || "ลบสินค้าไม่สำเร็จ",
+        text: error.response?.data?.message || "ลบสินค้าไม่สำเร็จ",
         showConfirmButton: false,
         timer: 1500,
       });
-    }
-  };
-  //คือการเปิด modal และส่งข้อมูลสินค้าไปให้ modal
-  const handleEdit = (product) => {
-    setCurrentProduct(product);
-    setIsModalOpen(true);
-  };
-  //คือการปิด modal
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setCurrentProduct(null);
-  };
-  //คือการอัพเดทข้อมูลสินค้า
-  const handleUpdate = async (product) => {
-    try {
-      const res = await ProductServices.updateProduct(product);
-      if (res.status === 200) {
-        const newProducts = products.map((p) =>
-          p._id === product._id ? product : p
-        );
-        setProducts(newProducts);
-        Swal.fire({
-          icon: "success",
-          title: "อัพเดทสินค้าสำเร็จ",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        setIsModalOpen(false);
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "อัพเดทสินค้าไม่สำเร็จ",
-        text: error.response.data.message || "อัพเดทสินค้าไม่สำเร็จ",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
-  };
-  //เปลี่ยนค่าข้อมูลสินค้า
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "file") {
-      setCurrentProduct({ ...products, [name]: files[0] });
-    } else {
-      setCurrentProduct({ ...products, [name]: value });
     }
   };
 
-  //เปลี่ยนค่าไฟล์รูปภาพ
+  const handleEdit = (product) => {
+    setEditProduct({ ...product }); // คัดลอกข้อมูลสินค้า
+    setSelectedImage(null); // เคลียร์ไฟล์ใหม่
+    setIsModalOpen(true);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditProduct((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setCurrentProduct({ ...currentProduct, file });
+    setSelectedImage(file);
+    // แสดงตัวอย่างรูปภาพใหม่
+    if (file) {
+      setEditProduct((prev) => ({
+        ...prev,
+        image: URL.createObjectURL(file), // ใช้สำหรับ preview
+      }));
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setEditProduct(null);
+    setSelectedImage(null);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", editProduct.name);
+    formData.append("description", editProduct.description);
+    formData.append("price", editProduct.price);
+    formData.append("category", editProduct.category);
+    if (selectedImage) {
+      formData.append("file", selectedImage);
+    }
+
+    try {
+      const response = await ProductServices.updateProduct(editProduct._id, formData);
+      const updatedProduct = response.data;
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product._id === updatedProduct._id ? updatedProduct : product
+        )
+      );
+      handleModalClose(); // ปิด modal หลังสำเร็จ
+      Swal.fire({
+        icon: "success",
+        title: "อัพเดทข้อมูลสินค้าสำเร็จ",
+        showConfirmButton: false,
+        timer: 1800,
+      });
+    } catch (error) {
+      console.error("Update error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "อัพเดทข้อมูลสินค้าไม่สำเร็จ",
+        text: error.response?.data?.message || "อัพเดทข้อมูลสินค้าไม่สำเร็จ",
+        showConfirmButton: false,
+        timer: 1800,
+      });
+    }
   };
 
   return (
     <div className="w-screen max-w-full overflow-x-auto">
       <div className="w-full overflow-x-auto">
         <table className="table w-full min-w-full border-collapse border border-gray-300">
-          {/* head */}
           <thead className="bg-gray-200">
             <tr>
               <th className="border border-gray-300 px-4 py-2 text-center">
@@ -160,7 +174,7 @@ const Index = () => {
                     onClick={() => handleEdit(product)}
                     className="mr-2 hover:bg-yellow-200 rounded-lg"
                   >
-                    <RxPencil2 className="w-8 h-8 text- text-yellow-600" />
+                    <RxPencil2 className="w-8 h-8 text-yellow-600" />
                   </button>
                   <button
                     onClick={() => handleDelete(product._id)}
@@ -172,7 +186,6 @@ const Index = () => {
               </tr>
             ))}
           </tbody>
-          {/* foot */}
           <tfoot className="bg-gray-200">
             <tr>
               <th className="border border-gray-300 px-4 py-2 text-center">
@@ -185,7 +198,7 @@ const Index = () => {
                 Price
               </th>
               <th className="border border-gray-300 px-4 py-2 text-center">
-                Price
+                Description
               </th>
               <th className="border border-gray-300 px-4 py-2 text-center">
                 Category
@@ -197,8 +210,7 @@ const Index = () => {
           </tfoot>
         </table>
       </div>
-      {/* ModalEditFromnow! */}
-
+      {/* ModalEditForm */}
       {isModalOpen && (
         <div className="modal modal-open">
           <div className="modal-box">
@@ -211,7 +223,7 @@ const Index = () => {
                 <input
                   type="text"
                   name="name"
-                  value={currentProduct.name}
+                  value={editProduct?.name || ""}
                   onChange={handleChange}
                   required
                   className="input input-bordered w-full"
@@ -224,37 +236,44 @@ const Index = () => {
                 <input
                   type="text"
                   name="description"
-                  value={currentProduct.description}
+                  value={editProduct?.description || ""}
                   onChange={handleChange}
                   required
                   className="input input-bordered w-full"
                 />
               </div>
-
               <div className="form-control mb-4">
-                <label className="label">
+                <label className="label" htmlFor="file">
                   <span className="label-text">File Photo:</span>
                 </label>
-
-                {/* แสดงภาพที่อัปโหลดใหม่ ถ้ามี */}
-                {currentProduct?.file && (
+                {/* แสดงรูปภาพเดิม */}
+                {editProduct?.image && !selectedImage && (
                   <div className="flex justify-center mt-4">
                     <img
-                      src={URL.createObjectURL(currentProduct.file)}
+                      src={editProduct.image}
+                      alt={editProduct.name}
+                      className="max-w-xs"
+                    />
+                  </div>
+                )}
+                {/* แสดงตัวอย่างรูปภาพใหม่ */}
+                {selectedImage && (
+                  <div className="flex justify-center mt-4">
+                    <img
+                      src={URL.createObjectURL(selectedImage)}
                       alt="New Product Preview"
                       className="max-w-xs"
                     />
                   </div>
                 )}
-
                 <input
+                  id="file"
                   type="file"
                   name="file"
                   onChange={handleFileChange}
-                  className="file-input file-input-neutral"
+                  className="file-input file-input-neutral mt-2"
                 />
               </div>
-
               <div className="form-control mb-4">
                 <label className="label">
                   <span className="label-text">Price:</span>
@@ -262,7 +281,7 @@ const Index = () => {
                 <input
                   type="number"
                   name="price"
-                  value={currentProduct.price}
+                  value={editProduct?.price || ""}
                   onChange={handleChange}
                   required
                   className="input input-bordered w-full"
@@ -275,13 +294,12 @@ const Index = () => {
                 <input
                   type="text"
                   name="category"
-                  value={currentProduct.category}
+                  value={editProduct?.category || ""}
                   onChange={handleChange}
                   required
                   className="input input-bordered w-full"
                 />
               </div>
-
               <div className="modal-action">
                 <button
                   type="button"
