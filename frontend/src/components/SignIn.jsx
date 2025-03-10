@@ -9,7 +9,7 @@ import { useNavigate, useLocation } from "react-router";
 import UserService from "../services/user.service";
 
 const SignIn = () => {
-  const { login, signUpWithGoogle } = useContext(AuthContext);
+  const { login, signUpWithGoogle, signUpWithGithub } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
@@ -40,6 +40,30 @@ const SignIn = () => {
         console.log(error);
       });
   };
+
+  const githubSignUp = () => {
+    signUpWithGithub()
+      .then(async (result) => {
+        const user = result.user;
+        console.log(user);
+        // to do add user to database
+        await UserService.addUser(user.email);
+        document.getElementById(name).close();
+        Swal.fire({
+          title: "Github authenticate",
+          text: "authenticate successfully!",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate(from);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const googleSignUp = () => {
     signUpWithGoogle()
       .then(async (result) => {
@@ -138,7 +162,7 @@ const SignIn = () => {
 
         {/* GitHub Button */}
         <button
-       
+       onClick={githubSignUp}
           className="btn btn-circle btn-outline hover:bg-gray-800 hover:text-white transition duration-300"
         >
           <DiGithubFull className="w-8 h-8" />

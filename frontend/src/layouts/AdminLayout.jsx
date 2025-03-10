@@ -51,7 +51,10 @@ const AdminLayout = () => {
               <li>
                 <a href="/dashboard" className="flex justify-start mb-3">
                   <img src={logo} className="w-20" />
-                  <p className="ml-2 border-spacing-6 font-bold badge-success rounded-md p-2">{user.displayName}</p>
+                  <p className="ml-2 border-spacing-6 font-bold badge-success rounded-md p-2">
+  {user.displayName || user.username}
+</p>
+
                   <div className="badge badge-primary">Admin</div>
                 </a>
               </li>

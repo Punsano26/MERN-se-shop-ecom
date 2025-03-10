@@ -1,36 +1,45 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../contexts/auth.context";
+import { updateProfile } from "firebase/auth"; // Import updateProfile จาก Firebase
 import { MdOutlineEdit } from "react-icons/md";
 import Swal from "sweetalert2";
 
 const SettingProfile = () => {
   const { user } = useContext(AuthContext);
-  const [username, setUsername] = useState("");
-  const [imageURL, setImageURL] = useState("");
+  const [username, setUsername] = useState(user?.displayName || ""); // ดึงค่าจาก user
+  const [imageURL, setImageURL] = useState(user?.photoURL || "");
 
-  //ไว้ใช้สำหรับเพิ่มฟังก์การแก้ไขข้อมูล username&email
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateUserProfile(username, imageURL);
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      await updateProfile(user, {
+        displayName: String(username || ""),
+        photoURL: String(imageURL || ""),
+      });
+
       Swal.fire({
-        title: "Your username&image updated!",
-        text: "You update finish",
+        title: "Your profile has been updated!",
+        text: "Your username & image were updated successfully.",
         icon: "success",
       });
     } catch (error) {
       Swal.fire({
-        position: "center",
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: error?.response?.data?.message || error.message,
+        text: error.message || "Something went wrong!",
         timer: 2000,
       });
     }
   };
+
   if (!user) {
-    return <div>you are not logged in</div>;
+    return <div>You are not logged in</div>;
   }
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="modal-box bg-white rounded-lg shadow-2xl p-8 w-full max-w-md relative">
@@ -44,7 +53,7 @@ const SettingProfile = () => {
             <input
               type="text"
               className="grow"
-              placeholder="Daisy"
+              placeholder="Enter your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -54,7 +63,7 @@ const SettingProfile = () => {
             <input
               type="text"
               className="grow"
-              placeholder="URL"
+              placeholder="Enter image URL"
               value={imageURL}
               onChange={(e) => setImageURL(e.target.value)}
             />

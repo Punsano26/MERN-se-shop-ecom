@@ -10,7 +10,7 @@ const Index = () => {
   const [editProduct, setEditProduct] = useState(null); // เก็บข้อมูลสินค้าที่แก้ไข
   const [selectedImage, setSelectedImage] = useState(null); // เก็บไฟล์รูปใหม่
   const [currentPage, setCurrentPage] = useState(1); // เพิ่ม state สำหรับหน้า
-  const [productsPerPage] = useState(5); // จำนวนสินค้าต่อหน้า
+  const [productsPerPage] = useState(6); // จำนวนสินค้าต่อหน้า
 
   useEffect(() => {
     const fetchProducts = async () => {
