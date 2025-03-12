@@ -1,83 +1,32 @@
 import React, { useEffect, useState } from "react";
 import OrderService from "../services/order.service";
-import ProductServices from "../services/product.service";
-import Swal from "sweetalert2";
 
 const ModalOrderdt = ({ orderDetail, orderID }) => {
-    const [order, setOrder] = useState(null);
-    const formatPrice = (price) => {
-      return new Intl.NumberFormat("th-TH", {
-        style: "currency",
-        currency: "THB",
-      }).format(price);
-    };
-    
-    useEffect(() => {
-      try {
-        OrderService.getOrderById(orderID).then((res) => {
-          setOrder(res.data);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }, [orderID]);
+  const [order, setOrder] = useState(null);
 
-//รุ่นนี้มีบั๊คอยู่ใน หลังบ้าน
-  // useEffect(() =>
-  //   if (order) {
-  //     order.products.map((product, index) => {
-  //       ProductServices.getProductByID(product.productId).then((res) => {
-  //           setOrder((prevOrder) => {
-  //           const updatedProducts = [...prevOrder.products];
-  //           updatedProducts[index] = {
-  //             ...res.data,
-  //             quantity: product.quantity,
-  //           };
-  //           return { ...prevOrder, products: updatedProducts };
-  //         });
-  //       });
-  //     });
-  //   }
-  // }, [order]);
-//รุ่นนี้ใช้งานได้จริงแต่ไม่เข้าใจเลย 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("th-TH", {
+      style: "currency",
+      currency: "THB",
+    }).format(price);
+  };
+
   useEffect(() => {
-    if (order && order.products) {
-      order.products.forEach((product, index) => {
-        // ตรวจสอบว่า productId มีค่าและไม่ใช่ 'undefined' หรือ null
-        if (!product.productId || product.productId === "undefined") {
-          console.warn(`Skipping product at index ${index}: Invalid productId`, product);
-          return;
-        }
-  
-        ProductServices.getProductByID(product.productId)
-          .then((res) => {
-            setOrder((prevOrder) => {
-              const updatedProducts = [...prevOrder.products];
-              updatedProducts[index] = {
-                ...res.data,
-                quantity: product.quantity,
-              };
-              return { ...prevOrder, products: updatedProducts };
-            });
-          })
-          .catch((error) => {
-            console.error(`Failed to fetch product with ID ${product.productId}:`, error);
-            Swal.fire({
-              icon: "error",
-              title: "Failed to load product",
-              text: `Could not load product with ID ${product.productId}`,
-            });
-          });
-      });
-    }
-  }, [order]);
+    OrderService.getOrderById(orderID)
+      .then((res) => setOrder(res.data))
+      .catch((error) => console.log(error));
+  }, [orderID]);
+
   return (
     <div>
-      {/* You can open the modal using document.getElementById('ID').showModal() method */}
-      <dialog id={orderDetail} className="modal">
-        <div className="modal-box">
+      {/* ใช้ showModal() เพื่อเปิด modal */}
+      <dialog
+        id={orderDetail}
+        className="modal flex justify-center items-center"
+      >
+        <div className="modal-box w-full max-w-2xl">
           <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
+            {/* ปุ่มปิด modal */}
             <button
               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
               type="button"
@@ -85,11 +34,16 @@ const ModalOrderdt = ({ orderDetail, orderID }) => {
             >
               ✕
             </button>
-            <h3 className="font-bold text-lg">View Orders Detial!</h3>
-            <p className="py-4">Products </p>
-            <span>Total:{formatPrice(order?.total)} </span>
 
-            {/* table */}
+            <h3 className="font-bold text-lg">View Order Details</h3>
+            <div className="flex justify-between items-center mt-2">
+              <p className="">Products</p>
+              <span className="text-right">
+                Total: {formatPrice(order?.total)}{" "}
+              </span>
+            </div>
+
+            {/* ตารางสินค้า */}
             <div className="overflow-x-auto">
               <table className="table">
                 {/* head */}
@@ -105,30 +59,35 @@ const ModalOrderdt = ({ orderDetail, orderID }) => {
                 </thead>
                 <tbody>
                   {order?.products?.length > 0 ? (
-                    order?.products.map((item, index) => (
-                      // ยังไม่มีการ return ค่าใน map() {/* row 1 */}
-                      <tr key={item._id}>
-                        <td className="text-center">{index + 1}</td>
-
-                        <td>
-                          <div className="flex items-center gap-3">
-                            <div className="avatar">
-                              <div className="mask mask-squircle h-12 w-12">
-                                <img
-                                  src={item.image}
-                                  alt={item.name}
-                                  className="w-16 h-16 object-cover rounded-lg"
-                                />
+                    order.products.map((item, index) => {
+                      const product = item.productId;
+                      return (
+                        <tr key={item._id}>
+                          <td className="text-center">{index + 1}</td>
+                          <td>
+                            <div className="flex items-center gap-3">
+                              <div className="avatar">
+                                <div className="mask mask-squircle h-12 w-12">
+                                  <img
+                                    src={product?.image}
+                                    alt={product?.name}
+                                    className="w-16 h-16 object-cover rounded-lg"
+                                  />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="text-center">{item.name}</td>
-                        <td className="text-center">{item.price}</td>
-                        <td className="text-center">{item.quantity}</td>
-                        <td className="text-center">{item.price*item.quantity}</td>
-                      </tr>
-                    ))
+                          </td>
+                          <td className="text-center">{product?.name}</td>
+                          <td className="text-center">
+                            {formatPrice(product?.price)}
+                          </td>
+                          <td className="text-center">{item.quantity}</td>
+                          <td className="text-center">
+                            {formatPrice(product?.price * item.quantity)}
+                          </td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
                       <td colSpan="6" className="text-center py-4">
@@ -150,42 +109,44 @@ const ModalOrderdt = ({ orderDetail, orderID }) => {
                 </tfoot>
               </table>
             </div>
+
+            {/* รายละเอียดการจัดส่ง */}
             <div className="mt-4">
-            <h3 className="text-lg font-semibold">Shipping Details</h3>
-            <div className="flex justify-between flex-col items-start md:flex-row">
-              <div className="w-1/2">
-                {/* Left zone */}
-                <p>
-                  <span className="font-bold">Name:</span>{" "}
-                  {order?.shipping?.name}
-                </p>
-                <p>
-                  <span className="font-bold">Phone:</span>{" "}
-                  {order?.shipping?.phone}
-                </p>
-                <p>
-                  <span className="font-bold">Address:</span>{" "}
-                  {order?.shipping?.address?.line1}
-                </p>
-              </div>
-              <div className="w-1/2">
-                {/* Right zone */}
-                <p>
-                  <span className="font-bold">City:</span>{" "}
-                  {order?.shipping?.address?.city}
-                </p>
-                <p>
-                  <span className="font-bold">Country:</span>{" "}
-                  {order?.shipping?.address?.country}
-                </p>
-                <p>
-                  <span className="font-bold">Postal code:</span>{" "}
-                  {order?.shipping?.address?.postal_code}
-                </p>
+              <h3 className="text-lg font-semibold">Shipping Details</h3>
+              <div className="flex justify-between flex-col items-start md:flex-row">
+                <div className="w-1/2">
+                  <p>
+                    <span className="font-bold">Name:</span>{" "}
+                    {order?.shipping?.name}
+                  </p>
+                  <p>
+                    <span className="font-bold">Phone:</span>{" "}
+                    {order?.shipping?.phone}
+                  </p>
+                  <p>
+                    <span className="font-bold">Address:</span>{" "}
+                    {order?.shipping?.address?.line1}
+                  </p>
+                </div>
+                <div className="w-1/2">
+                  <p>
+                    <span className="font-bold">City:</span>{" "}
+                    {order?.shipping?.address?.city}
+                  </p>
+                  <p>
+                    <span className="font-bold">Country:</span>{" "}
+                    {order?.shipping?.address?.country}
+                  </p>
+                  <p>
+                    <span className="font-bold">Postal code:</span>{" "}
+                    {order?.shipping?.address?.postal_code}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
           </form>
+
+          {/* ปุ่มปิด Modal */}
           <button
             className="btn mt-2"
             onClick={() => document.getElementById(orderDetail).close()}
